@@ -16,8 +16,8 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
+from sova import views
+
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^grappelli/', include('grappelli.urls')), # grappelli URLS
-    url(r'^', include('sova.urls')),
+    url(r'^', views.index, name='index'),
 ]
