@@ -12,12 +12,14 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for es in EmailSchedule.objects.select_related().filter(date__lte=timezone.now(), sent = False):
+            if not es.group.email_enabled:
+                continue
             self.stdout.write("Scheduled to send: " + str(es))
             if es.event.mail_prefix:
                 subject = "[%s] %s" % (es.event.mail_prefix, es.name)
             else:
                 subject = es.name
-            recipients = [ p.email for p in es.group.persons.all() ]
+            recipients = [ p.email for p in es.group.persons.filter(email_enabled=True) ]
             send_mail(subject, "%s\n\n%s\n\n%s\n" % (es.event.header, es.message, es.event.footer), 'Hoo <donotreply@fielder.ivoras.net>', recipients)
             es.sent = True
             es.save()

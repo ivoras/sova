@@ -108,7 +108,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'hr-hr'
 
 TIME_ZONE = 'Europe/Zagreb'
 
@@ -117,6 +117,8 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+# DATETIME_FORMAT = 'd.m.Y. H:i'
 
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 25

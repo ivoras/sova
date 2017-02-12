@@ -4,6 +4,7 @@ from django.utils import timezone
 class Person(models.Model):
     email = models.CharField(max_length=100)
     name = models.CharField(max_length=100)
+    email_enabled = models.BooleanField(default=True)
 
     def __str__(self):
         return "%s <%s>" % (self.name, self.email)
@@ -27,6 +28,7 @@ class Event(models.Model):
     def __str__(self):
         return "%s %s" % (self.name, timezone.localtime(self.date).strftime('%d.%m.%Y. %H:%M'))
 
+
 class EmailSchedule(models.Model):
     name = models.CharField(max_length=100)
     group = models.ForeignKey(Group)
@@ -38,3 +40,6 @@ class EmailSchedule(models.Model):
 
     def __str__(self):
         return "%s (%s) @ %s" % (self.name, str(self.event), timezone.localtime(self.date).strftime('%d.%m.%Y. %H:%M'))
+
+    class Meta:
+        ordering = ('-date', )
