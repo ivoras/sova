@@ -2,6 +2,14 @@ from django.contrib import admin
 
 from .models import Person, Group, Event, EmailSchedule, Participation
 
+class PersonAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'email_enabled')
+    search_fields = ('name', 'email')
+
+class GroupAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email_enabled')
+    search_fields = ('name', )
+
 class EmailScheduleInline(admin.StackedInline):
     model = EmailSchedule
 
@@ -21,8 +29,8 @@ class EmailScheduleAdmin(admin.ModelAdmin):
 class ParticipationAdmin(admin.ModelAdmin):
     list_display = ('person', 'event', 'grade', 'participated')
 
-admin.site.register(Person)
-admin.site.register(Group)
+admin.site.register(Person, PersonAdmin)
+admin.site.register(Group, GroupAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(EmailSchedule, EmailScheduleAdmin)
 admin.site.register(Participation, ParticipationAdmin)

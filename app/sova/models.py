@@ -9,6 +9,9 @@ class Person(models.Model):
     def __str__(self):
         return "%s <%s>" % (self.name, self.email)
 
+    class Meta:
+        ordering = ('name', )
+
 class Group(models.Model):
     name = models.CharField(max_length=100)
     persons = models.ManyToManyField(Person)
@@ -16,6 +19,9 @@ class Group(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ('name', )
 
 class Event(models.Model):
     name = models.CharField(max_length=100)
@@ -53,5 +59,5 @@ class Participation(models.Model):
     note = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return "%s, %s: %s" % (self.person.name, self.event.name, '✓' if self.participated else ' ')
+        return "%s, %s: %s" % (self.person.name, self.event.name, '✓' if self.participated else '-')
 
