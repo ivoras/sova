@@ -56,7 +56,7 @@ class EmailSchedule(models.Model):
 class Participation(models.Model):
     event = models.ForeignKey(Event)
     person = models.ForeignKey(Person)
-    participated = models.BooleanField(default=True)
+    participated = models.BooleanField(default=False)
     grade = models.IntegerField(blank=True, null=True)
     note = models.TextField(blank=True, null=True)
 
