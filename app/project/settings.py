@@ -25,7 +25,7 @@ SECRET_KEY = '+uyry45etk7ax)i8lfsdp5ejp3)=l8-w9ij8#3iq!rv^%w(r76'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['fielder.ivoras.net']
+ALLOWED_HOSTS = ['fielder.ivoras.net','127.0.0.1']
 
 
 # Application definition
