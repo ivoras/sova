@@ -39,7 +39,6 @@ class Event(models.Model):
     def __str__(self):
         return "%s %s" % (self.name, timezone.localtime(self.date).strftime('%d.%m.%Y. %H:%M'))
 
-
 class EmailSchedule(models.Model):
     name = models.CharField(max_length=100)
     group = models.ForeignKey(Group)
@@ -59,7 +58,7 @@ class Participation(models.Model):
     date_entered = models.DateTimeField(auto_now_add=True)
     event = models.ForeignKey(Event)
     person = models.ForeignKey(Person)
-    requirements_done = models.BooleanField(default=False)
+    requirements_done = models.BooleanField(default=False) # Participation requirements (e.g. payment) have been satisfied
     participated = models.BooleanField(default=False)
     grade = models.IntegerField(blank=True, null=True)
     note = models.TextField(blank=True, null=True)
