@@ -56,6 +56,7 @@ class EmailSchedule(models.Model):
         ordering = ('-date', )
 
 class Participation(models.Model):
+    date_entered = models.DateTimeField(auto_now_add=True)
     event = models.ForeignKey(Event)
     person = models.ForeignKey(Person)
     requirements_done = models.BooleanField(default=False)
