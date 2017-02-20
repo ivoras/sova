@@ -27,8 +27,9 @@ class Command(BaseCommand):
                 html = get_template('sova/confirmationemail.html')
                 context = {
                     'person': recipient,
-                    'event': es.event,
-                    'server': settings.ALLOWED_HOSTS[1]  # there has to be a better way to do this
+                    'schedule': es,
+                    'server': settings.ALLOWED_HOSTS[1] + ':8000',  # there has to be a better way to do this
+
                 }
                 html_content = html.render(context)
                 msg = EmailMultiAlternatives(subject, plain_text, 'Hoo <donotreply@fielder.ivoras.net>', [recipient.email])
