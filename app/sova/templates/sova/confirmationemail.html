@@ -3,6 +3,13 @@
 Join event
 {% endblock %}
 {% block 'body' %}
-<h2>{{person.name}}, will you join the event {{event.name}}?</h2>
-<a href="{{server}}{% url 'accept' event.id person.id %}">I will</a>
+<h1>{{schedule.event.header}}</h1>
+<div>{{schedule.message}}</div>
+{% if schedule.add_custom_link_before_footer %}
+<a href="{{server}}{% url 'accept' schedule.event.id person.id %}">I will</a>
+{% endif %}
+<footer>{{schedule.event.footer}}</footer>
+{% if not schedule.add_custom_link_before_footer %}
+<a href="{{server}}{% url 'accept' schedule.event.id person.id %}">I will</a>
+{% endif %}
 {% endblock %}
