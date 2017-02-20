@@ -105,6 +105,17 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+TINYMCE_DEFAULT_CONFIG = {
+    'theme': 'advanced',
+    'theme_advanced_buttons1': 'bold,italic,underline,separator,bullist,numlist,separator,outdent,indent',
+    'theme_advanced_buttons2': 'undo,redo,separator,link,unlink,separator,code',
+    'theme_advanced_buttons3': '',
+    'theme_advanced_toolbar_location': 'top',
+    'theme_advanced_toolbar_align': 'left',
+    'paste_text_sticky': True,
+    'paste_text_sticky_default': True,
+    'plugins': 'paste'
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
