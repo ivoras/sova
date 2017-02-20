@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['fielder.ivoras.net','127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+    'tinymce',
     'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',

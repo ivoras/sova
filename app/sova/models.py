@@ -2,6 +2,8 @@
 
 from django.db import models
 from django.utils import timezone
+from tinymce.models import HTMLField
+
 
 class Person(models.Model):
     name = models.CharField(max_length=100)
@@ -45,7 +47,7 @@ class EmailSchedule(models.Model):
     event = models.ForeignKey(Event)
     date = models.DateTimeField()
     subject = models.CharField(max_length=200)
-    message = models.TextField()
+    message = HTMLField()
     sent = models.BooleanField(default=False)
     add_custom_link_before_footer = models.BooleanField(default=False)
 
