@@ -35,6 +35,6 @@ def vote(request, event, person):
             'event': event,
             'error_message': "You didn't select a choice.",
         })
-    participation = Participation(person=person, event=event, accepted=accepted);
-    participation.save();
+    participation = Participation(person=person, event=event, accepted=accepted)
+    participation.save()
     return HttpResponseRedirect(reverse('join', args=(person.pk, event.pk,)))
