@@ -1,0 +1,8 @@
+{% extends 'sova/base.html' %}
+{% block 'title' %}
+Join event
+{% endblock %}
+{% block 'body' %}
+<h2>{{person.name}}, will you join the event {{event.name}}?</h2>
+<a href="{{server}}{% url 'accept' event.id person.id %}">I will</a>
+{% endblock %}

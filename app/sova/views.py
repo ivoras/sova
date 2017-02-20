@@ -38,3 +38,11 @@ def vote(request, event, person):
     participation = Participation(person=person, event=event, accepted=accepted)
     participation.save()
     return HttpResponseRedirect(reverse('join', args=(person.pk, event.pk,)))
+
+
+def accept(request, event, person):
+    person = get_object_or_404(Person, pk=int(person))
+    event = get_object_or_404(Event, pk=int(event))
+    participation = Participation(person=person, event=event, accepted=True)
+    participation.save()
+    return HttpResponseRedirect(reverse('join', args=(person.pk, event.pk,)))
