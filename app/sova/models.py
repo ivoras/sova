@@ -47,6 +47,7 @@ class EmailSchedule(models.Model):
     subject = models.CharField(max_length=200)
     message = models.TextField()
     sent = models.BooleanField(default=False)
+    add_custom_link_before_footer = models.BooleanField(default=False)
 
     def __str__(self):
         return "%s (%s) @ %s" % (self.name, str(self.event), timezone.localtime(self.date).strftime('%d.%m.%Y. %H:%M'))
