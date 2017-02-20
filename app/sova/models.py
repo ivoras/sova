@@ -60,6 +60,7 @@ class Participation(models.Model):
     person = models.ForeignKey(Person)
     requirements_done = models.BooleanField(default=False) # Participation requirements (e.g. payment) have been satisfied
     participated = models.BooleanField(default=False)
+    accepted = models.BooleanField(default=False) # They probably won't open the link if they don't want to participate, but we still need to track OR change this into an autoaccept link
     grade = models.IntegerField(blank=True, null=True)
     note = models.TextField(blank=True, null=True)
 

@@ -18,7 +18,7 @@ from django.conf.urls import url
 from sova import views
 
 urlpatterns = [
-    # url(r'^vote/(?P<event>[0-9]+)/(?P<person>[0-9]+)$', views.vote, name='vote'),
+    url(r'^vote/(?P<event>[0-9]+)/(?P<person>[0-9]+)$', views.vote, name='vote'),
     url(r'^join/(?P<event>[0-9]+)/(?P<person>[0-9]+)$', views.join, name='join'),
     url(r'^$', views.index, name='index'),
 
