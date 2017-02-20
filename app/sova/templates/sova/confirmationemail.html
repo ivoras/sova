@@ -3,7 +3,7 @@
 Join event
 {% endblock %}
 {% block 'body' %}
-<h1>{{schedule.event.header}}</h1>
+<header>{{schedule.event.header}}</header>
 <div>{{schedule.message}}</div>
 {% if schedule.add_custom_link_before_footer %}
 <a href="{{server}}{% url 'accept' schedule.event.id person.id %}">I will</a>
