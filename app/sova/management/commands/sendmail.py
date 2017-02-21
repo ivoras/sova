@@ -21,15 +21,13 @@ class Command(BaseCommand):
                 subject = "[%s] %s" % (es.event.mail_prefix, es.name)
             else:
                 subject = es.name
-            recipients = es.group.persons.filter(email_enabled=True)
-            for recipient in recipients:
+            for recipient in es.group.persons.filter(email_enabled=True):
                 plain_text = "%s\n\n%s\n\n%s\n" % (es.event.header, es.message, es.event.footer)
                 html = get_template('sova/confirmationemail.html')
                 context = {
                     'person': recipient,
                     'schedule': es,
                     'server': settings.ALLOWED_HOSTS[1] + ':8000',  # there has to be a better way to do this
-
                 }
                 html_content = html.render(context)
                 msg = EmailMultiAlternatives(subject, plain_text, 'Hoo <donotreply@fielder.ivoras.net>', [recipient.email])
