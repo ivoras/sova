@@ -37,6 +37,7 @@ class Event(models.Model):
     header = models.TextField(default="Hi,")
     footer = models.TextField(default="----")
     date = models.DateTimeField()
+    deadline_for_joining = models.DateTimeField(null=True, blank=True)
     schedules = models.ManyToManyField(Group, through='EmailSchedule')
     participations = models.ManyToManyField(Person, through='Participation')
 
