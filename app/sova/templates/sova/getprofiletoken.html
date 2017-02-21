@@ -10,7 +10,7 @@ Edit User Profile
     {% csrf_token %}
     <label for="profile_email">Please enter your e-mail address</label>
     <input type="email" id="profile_email" name="profile_email"/>
-    <input type="submit" value="Submit" class="btn btn-primary">
+    <input type="submit" value="Submit" class="btn btn-default">
 </form>
 {% else %}
 <p>Token has been generated for {{person.name}} and it's {{token.token}}</p>
