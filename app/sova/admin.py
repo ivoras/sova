@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Person, Group, Event, EmailSchedule, Participation
+from .models import Person, Group, Event, EmailSchedule, Participation, Token
 
 class PersonAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'email_enabled')
@@ -29,8 +29,12 @@ class EmailScheduleAdmin(admin.ModelAdmin):
 class ParticipationAdmin(admin.ModelAdmin):
     list_display = ('person', 'event', 'grade', 'participated')
 
+class TokenAdmin(admin.ModelAdmin):
+    list_display = ('token', 'person','date_created')
+
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(EmailSchedule, EmailScheduleAdmin)
 admin.site.register(Participation, ParticipationAdmin)
+admin.site.register(Token, TokenAdmin)
