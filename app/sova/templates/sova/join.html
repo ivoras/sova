@@ -3,7 +3,7 @@
 Join event
 {% endblock %}
 {% block 'body' %}
-<h2>{{person.name}}, will you join the event {{event.name}}?</h2>
+<h1>{{person.name}}, will you join the event {{event.name}}?</h1>
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 {% if participation %}
 {% if participation.accepted %}
