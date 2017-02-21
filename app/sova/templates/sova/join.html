@@ -4,6 +4,8 @@ Join event
 {% endblock %}
 {% block 'body' %}
 <h1>{{person.name}}, will you join the event {{event.name}}?</h1>
+<p>{{event.header}}</p>
+
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 {% if participation %}
 {% if participation.accepted %}
@@ -22,7 +24,7 @@ Join event
     <input type="radio" name="choice" id="false" value="False"/>
     <label for="false">I won't</label><br/>
 
-    <input type="submit" value="Vote"/>
+    <input type="submit" value="Vote" class="btn btn-default"/>
 </form>
 {% endif %}
 {% endblock %}
