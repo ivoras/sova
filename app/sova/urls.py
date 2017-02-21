@@ -18,6 +18,9 @@ from django.conf.urls import url
 from sova import views
 
 urlpatterns = [
+    url(r'^sendprofiletoken/$', views.send_profile_token, name='sendprofiletoken'),
+    url(r'^getprofiletoken/(?P<person>[0-9]+)$', views.get_profile_token, name='getprofiletoken'),
+    url(r'^getprofiletoken/$', views.get_profile_token, name='getprofiletoken'),
     url(r'^accept/(?P<event>[0-9]+)/(?P<person>[0-9]+)$', views.accept, name='accept'),
     url(r'^vote/(?P<event>[0-9]+)/(?P<person>[0-9]+)$', views.vote, name='vote'),
     url(r'^join/(?P<event>[0-9]+)/(?P<person>[0-9]+)$', views.join, name='join'),

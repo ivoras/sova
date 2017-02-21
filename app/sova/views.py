@@ -1,8 +1,14 @@
+import os
+import base64
+
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.core.validators import validate_email
+from django import forms
+from django.utils import timezone
 
-from .models import Person, Event, Participation
+from .models import Person, Event, Participation, Token
 
 
 def index(req):
@@ -24,13 +30,13 @@ def join(req, event, person):
     return render(req, 'sova/join.html', context)
 
 
-def vote(request, event, person):
+def vote(req, event, person):
     person = get_object_or_404(Person, pk=int(person))
     event = get_object_or_404(Event, pk=int(event))
-    accepted = request.POST['choice']
+    accepted = req.POST['choice']
     if not (accepted == 'True' or accepted == 'False'):
         # redisplay the form
-        return render(request, 'sova/join.html', {
+        return render(req, 'sova/join.html', {
             'person': person,
             'event': event,
             'error_message': "You didn't select a choice.",
@@ -40,9 +46,42 @@ def vote(request, event, person):
     return HttpResponseRedirect(reverse('join', args=(person.pk, event.pk,)))
 
 
-def accept(request, event, person):
+def accept(req, event, person):
     person = get_object_or_404(Person, pk=int(person))
     event = get_object_or_404(Event, pk=int(event))
     participation = Participation(person=person, event=event, accepted=True)
     participation.save()
     return HttpResponseRedirect(reverse('join', args=(person.pk, event.pk,)))
+
+
+def get_profile_token(req, person=0):
+    try:
+        person = Person.objects.get(pk=int(person))
+        token = Token.objects.filter(person=person.id, date_created__gte=timezone.now() - timezone.timedelta(minutes=30)).order_by('-id')[0]
+    except Person.DoesNotExist:
+        person = None
+        token = None
+    except Token.DoesNotExist:
+        token = None
+    return render(req, 'sova/getprofiletoken.html', {
+            'person': person,
+            'token' : token
+    })
+
+
+def send_profile_token(req):
+    profile = req.POST.get('profile_email', False)
+    # no email address meaning just show the form
+    if not profile:
+        return HttpResponseRedirect(reverse('getprofiletoken'))
+    # otherwise, validate it and retrieve the Person
+    try:
+        validate_email(profile)
+        person = get_object_or_404(Person, email=str(profile))
+        token = Token(token=base64.urlsafe_b64encode(os.urandom(12)), person=person)
+        token.save()
+        return HttpResponseRedirect(reverse('getprofiletoken', args=(person.id,)))
+    except forms.ValidationError:
+        return render(req, 'sova/getprofiletoken.html', {
+            'error_message': "You've entered an invalid e-mail address",
+        })

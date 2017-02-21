@@ -29,6 +29,7 @@ class Group(models.Model):
     class Meta:
         ordering = ('name', )
 
+
 class Event(models.Model):
     name = models.CharField(max_length=100)
     mail_prefix = models.CharField(max_length=100, blank=True, null=True)
@@ -40,6 +41,7 @@ class Event(models.Model):
 
     def __str__(self):
         return "%s %s" % (self.name, timezone.localtime(self.date).strftime('%d.%m.%Y. %H:%M'))
+
 
 class EmailSchedule(models.Model):
     name = models.CharField(max_length=100)
@@ -57,6 +59,7 @@ class EmailSchedule(models.Model):
     class Meta:
         ordering = ('-date', )
 
+
 class Participation(models.Model):
     date_entered = models.DateTimeField(auto_now_add=True)
     event = models.ForeignKey(Event)
@@ -70,3 +73,11 @@ class Participation(models.Model):
     def __str__(self):
         return "%s, %s: %s" % (self.person.name, self.event.name, '✓' if self.participated else '-')
 
+
+class Token(models.Model):
+    person = models.ForeignKey(Person)
+    token = models.CharField(max_length=16)
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "%s, %s: %s" % (self.person.name, self.token, self.date_created)
