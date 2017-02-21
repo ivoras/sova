@@ -1,0 +1,15 @@
+{% extends 'sova/base.html' %}
+{% block 'title' %}
+Join event
+{% endblock %}
+{% block 'body' %}
+<header>{{schedule.event.header}}</header>
+<div>{{schedule.message}}</div>
+{% if schedule.add_custom_link_before_footer %}
+<a href="{{server}}{% url 'accept' schedule.event.id person.id %}">I will</a>
+{% endif %}
+<footer>{{schedule.event.footer}}</footer>
+{% if not schedule.add_custom_link_before_footer %}
+<a href="{{server}}{% url 'accept' schedule.event.id person.id %}">I will</a>
+{% endif %}
+{% endblock %}

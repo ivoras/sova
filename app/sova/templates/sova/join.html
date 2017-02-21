@@ -3,6 +3,26 @@
 Join event
 {% endblock %}
 {% block 'body' %}
-<h2>Join the event: {{event.name}}</h2>
-<h3>{{person.name}}</h3>
+<h1>{{person.name}}, will you join the event {{event.name}}?</h1>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% if participation %}
+{% if participation.accepted %}
+<p><strong>You have chosen to participate. Your participation status is
+    {{participation.participated}}.</strong></p>
+{% else %}
+<p><strong>You have chosen not to participate.</strong></p>
+{% endif %}
+{% else %}
+<form action="{% url 'vote' event.id person.id %}" method="post">
+    {% csrf_token %}
+
+    <input type="radio" name="choice" id="true" value="True"/>
+    <label for="true">I will</label><br/>
+
+    <input type="radio" name="choice" id="false" value="False"/>
+    <label for="false">I won't</label><br/>
+
+    <input type="submit" value="Vote"/>
+</form>
+{% endif %}
 {% endblock %}
