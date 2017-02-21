@@ -12,18 +12,19 @@ class Person(models.Model):
     phone = models.CharField(max_length=50, null=True, blank=True)
     phone_enabled = models.BooleanField(default=False)
 
-    def __str__(self):
+    def __unicode__(self):
         return "%s <%s>" % (self.name, self.email)
 
     class Meta:
         ordering = ('name', )
+
 
 class Group(models.Model):
     name = models.CharField(max_length=100)
     persons = models.ManyToManyField(Person)
     email_enabled = models.BooleanField(default=True)
 
-    def __str__(self):
+    def __unicode__(self):
         return self.name
 
     class Meta:
@@ -39,7 +40,7 @@ class Event(models.Model):
     schedules = models.ManyToManyField(Group, through='EmailSchedule')
     participations = models.ManyToManyField(Person, through='Participation')
 
-    def __str__(self):
+    def __unicode__(self):
         return "%s %s" % (self.name, timezone.localtime(self.date).strftime('%d.%m.%Y. %H:%M'))
 
 
@@ -53,7 +54,7 @@ class EmailSchedule(models.Model):
     sent = models.BooleanField(default=False)
     add_custom_link_before_footer = models.BooleanField(default=False)
 
-    def __str__(self):
+    def __unicode__(self):
         return "%s (%s) @ %s" % (self.name, str(self.event), timezone.localtime(self.date).strftime('%d.%m.%Y. %H:%M'))
 
     class Meta:
@@ -70,7 +71,7 @@ class Participation(models.Model):
     grade = models.IntegerField(blank=True, null=True)
     note = models.TextField(blank=True, null=True)
 
-    def __str__(self):
+    def __unicode__(self):
         return "%s, %s: %s" % (self.person.name, self.event.name, '✓' if self.participated else '-')
 
 
@@ -79,5 +80,5 @@ class Token(models.Model):
     token = models.CharField(max_length=16)
     date_created = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
+    def __unicode__(self):
         return "%s, %s: %s" % (self.person.name, self.token, self.date_created)
