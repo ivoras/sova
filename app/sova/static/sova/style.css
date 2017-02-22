@@ -1,0 +1,9 @@
+.input-group {
+    margin-bottom: 20px;
+}
+label + input[type='text'] {
+    margin-top: 10px;
+}
+label + input[type='checkbox'] {
+    margin-left: 20px;
+}
