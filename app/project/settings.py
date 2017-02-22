@@ -134,9 +134,12 @@ USE_TZ = True
 
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 25
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Profile editing
+TOKEN_EXPIRY_TIME = 10
+
