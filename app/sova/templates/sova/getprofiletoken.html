@@ -18,5 +18,6 @@ Generate user token
 {% else %}
 <div class="alert alert-success" role="alert">Token has been generated for {{person.name}} and it's {{token.token}}
 </div>
+<div>Until sending via e-mail is implemented, you can <a href="{% url 'edituserprofile' token.token %} "> edit your profile directly.</a></div>
 {% endif %}
 {% endblock %}
