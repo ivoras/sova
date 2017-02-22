@@ -1,7 +1,7 @@
 .input-group {
     margin-bottom: 20px;
 }
-label + input[type='text'] {
+label + input[type='text'], label + input[type='email'] {
     margin-top: 10px;
 }
 label + input[type='checkbox'] {
