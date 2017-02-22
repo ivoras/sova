@@ -4,15 +4,19 @@ Generate user token
 {% endblock %}
 {% block 'body' %}
 <h1>Generate user token</h1>
-{% if error_message %}<div class="alert alert-danger" role="alert">{{ error_message }}</div>{% endif %}
+{% if error_message %}
+<div class="alert alert-danger" role="alert">{{ error_message }}</div>{% endif %}
 {% if not token %}
 <form action="{% url 'sendprofiletoken' %}" method="post">
     {% csrf_token %}
-    <label for="profile_email">Please enter your e-mail address</label>
-    <input type="email" id="profile_email" name="profile_email"/>
+    <div class="input-group">
+        <label for="profile_email">Please enter your e-mail address</label>
+        <input type="email" id="profile_email" name="profile_email" class="form-control"/>
+    </div>
     <input type="submit" value="Submit" class="btn btn-default">
 </form>
 {% else %}
-<div class="alert alert-success" role="alert">Token has been generated for {{person.name}} and it's {{token.token}}</div>
+<div class="alert alert-success" role="alert">Token has been generated for {{person.name}} and it's {{token.token}}
+</div>
 {% endif %}
 {% endblock %}
