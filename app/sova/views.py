@@ -1,12 +1,14 @@
 import os
 import base64
 
+
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.core.validators import validate_email
 from django import forms
 from django.utils import timezone
+from django.conf import settings
 
 from .models import Person, Event, Participation, Token
 
@@ -57,7 +59,7 @@ def accept(req, event, person):
 def get_profile_token(req, person=0):
     try:
         person = Person.objects.get(pk=int(person))
-        token = Token.objects.filter(person=person.id, date_created__gte=timezone.now() - timezone.timedelta(minutes=30)).order_by('-id')[0]
+        token = Token.objects.filter(person=person.id, date_created__gte=timezone.now() - timezone.timedelta(minutes=settings.TOKEN_EXPIRY_TIME)).order_by('-id')[0]
     except Person.DoesNotExist:
         person = None
         token = None
@@ -65,7 +67,7 @@ def get_profile_token(req, person=0):
         token = None
     return render(req, 'sova/getprofiletoken.html', {
             'person': person,
-            'token' : token
+            'token' : token,
     })
 
 
@@ -84,4 +86,21 @@ def send_profile_token(req):
     except forms.ValidationError:
         return render(req, 'sova/getprofiletoken.html', {
             'error_message': "You've entered an invalid e-mail address",
-        })
+     })
+
+
+def edit_user_profile(req, token=''):
+    try:
+        token = Token.objects.filter(token=token, date_created__gte=timezone.now() - timezone.timedelta(minutes=settings.TOKEN_EXPIRY_TIME)).order_by('-id')
+        if (token):
+            token = token[0]
+    # either no token or token has expired
+    except Token.DoesNotExist:
+        token = None
+    return render(req, 'sova/edituserprofile.html', {
+            'token': token,
+    })
+
+def save_user_profile(req, token=''):
+    return HttpResponseRedirect(reverse('edituserprofile'), args=(token.id,))
+

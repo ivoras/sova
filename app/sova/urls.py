@@ -18,6 +18,8 @@ from django.conf.urls import url
 from sova import views
 
 urlpatterns = [
+    url(r'^saveuserprofile/(?P<token>[A-Za-z0-9]+)$', views.edit_user_profile, name='saveuserprofile'),
+    url(r'^edituserprofile/(?P<token>[A-Za-z0-9]+)$', views.edit_user_profile, name='edituserprofile'),
     url(r'^sendprofiletoken/$', views.send_profile_token, name='sendprofiletoken'),
     url(r'^getprofiletoken/(?P<person>[0-9]+)$', views.get_profile_token, name='getprofiletoken'),
     url(r'^getprofiletoken/$', views.get_profile_token, name='getprofiletoken'),

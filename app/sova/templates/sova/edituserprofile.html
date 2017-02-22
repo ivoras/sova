@@ -1,0 +1,32 @@
+{% extends 'sova/base.html' %}
+{% block 'title' %}
+Edit user profile
+{% endblock %}
+{% block 'body' %}
+<h1>Edit user profile</h1>
+{% if not token %}
+<div class="alert alert-danger" role="alert">Your token has expired or is invalid, please try
+    <a href="{% url 'getprofiletoken' %}">getting a new token</a></div>
+{% else %}
+<form action="{% url 'saveuserprofile' token.token %}" method="post">
+    {% csrf_token %}
+    <div class="input-group">
+        <label for="name">User name</label>
+        <input type="text" value="{{token.person.name}}" maxlength="100" name="name" id="name" class="form-control"/>
+    </div>
+    <div class="input-group">
+        <label for="email_enabled">Is e-mail enabled?</label>
+        <input type="checkbox" {% if token.person.email_enabled %}checked="checked"{% endif %}  name="email_enabled" id="email_enabled"/>
+    </div>
+    <div class="input-group">
+        <label for="phone">Phone number</label>
+        <input type="text" value="{{token.person.phone}}" maxlength="50" name="phone" id="phone" class="form-control"/>
+    </div>
+    <div class="input-group">
+        <label for="phone_enabled">Is phone enabled?</label>
+        <input type="checkbox" {% if token.person.phone_enabled %}checked="checked"{% endif %} name="phone_enabled" id="phone_enabled"/>
+    </div>
+    <input type="submit" value="Update profile" class="btn btn-default" class="form-control"/>
+</form>
+{% endif %}
+{% endblock %}
