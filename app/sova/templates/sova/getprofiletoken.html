@@ -1,10 +1,10 @@
 {% extends 'sova/base.html' %}
 {% block 'title' %}
-Edit User Profile
+Generate user token
 {% endblock %}
 {% block 'body' %}
-<h1>User profile editing</h1>
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<h1>Generate user token</h1>
+{% if error_message %}<div class="alert alert-danger" role="alert">{{ error_message }}</div>{% endif %}
 {% if not token %}
 <form action="{% url 'sendprofiletoken' %}" method="post">
     {% csrf_token %}
@@ -13,6 +13,6 @@ Edit User Profile
     <input type="submit" value="Submit" class="btn btn-default">
 </form>
 {% else %}
-<p>Token has been generated for {{person.name}} and it's {{token.token}}</p>
+<div class="alert alert-success" role="alert">Token has been generated for {{person.name}} and it's {{token.token}}</div>
 {% endif %}
 {% endblock %}

@@ -6,13 +6,13 @@ Join event
 <h1>{{person.name}}, will you join the event {{event.name}}?</h1>
 <p>{{event.header}}</p>
 
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% if error_message %}<div class="alert alert-danger" role="alert">{{ error_message }}</div>{% endif %}
 {% if participation %}
 {% if participation.accepted %}
-<p><strong>You have chosen to participate. Your participation status is
-    {{participation.participated}}.</strong></p>
+<div class="alert alert-success" role="alert">You have chosen to participate. Your participation status is
+    {{participation.participated}}.</div>
 {% else %}
-<p><strong>You have chosen not to participate.</strong></p>
+<div class="alert alert-info" role="alert">You have chosen not to participate.</alert>
 {% endif %}
 {% else %}
 <form action="{% url 'vote' event.id person.id %}" method="post">
