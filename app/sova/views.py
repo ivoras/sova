@@ -90,9 +90,8 @@ def send_profile_token(req):
         # msg.send()
         return HttpResponseRedirect(reverse('getprofiletoken', args=(person.id,)))
     except forms.ValidationError:
-        return render(req, 'sova/getprofiletoken.html', {
-            'error_message': "You've entered an invalid e-mail address",
-     })
+        messages.error(req, "You've entered an invalid e-mail address")
+        return render(req, 'sova/getprofiletoken.html')
 
 
 def edit_user_profile(req, token=''):
