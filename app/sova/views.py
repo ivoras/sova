@@ -1,7 +1,6 @@
 import os
 import base64
 
-
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -9,6 +8,7 @@ from django.core.validators import validate_email
 from django import forms
 from django.utils import timezone
 from django.conf import settings
+from django.contrib import messages
 
 from .models import Person, Event, Participation, Token
 
@@ -59,7 +59,8 @@ def accept(req, event, person):
 def get_profile_token(req, person=0):
     try:
         person = Person.objects.get(pk=int(person))
-        token = Token.objects.filter(person=person.id, date_created__gte=timezone.now() - timezone.timedelta(minutes=settings.TOKEN_EXPIRY_TIME)).order_by('-id')[0]
+        token = Token.objects.filter(person=person.id, date_created__gte=timezone.now() - timezone.timedelta(
+            minutes=settings.TOKEN_EXPIRY_TIME)).order_by('-id')[0]
     except Person.DoesNotExist:
         person = None
         token = None
@@ -91,9 +92,8 @@ def send_profile_token(req):
 
 def edit_user_profile(req, token=''):
     try:
-        token = Token.objects.filter(token=token, date_created__gte=timezone.now() - timezone.timedelta(minutes=settings.TOKEN_EXPIRY_TIME)).order_by('-id')
-        if (token):
-            token = token[0]
+        token = Token.objects.get(token=token, date_created__gte=timezone.now() - timezone.timedelta(
+            minutes=settings.TOKEN_EXPIRY_TIME))
     # either no token or token has expired
     except Token.DoesNotExist:
         token = None
@@ -101,6 +101,37 @@ def edit_user_profile(req, token=''):
             'token': token,
     })
 
+
 def save_user_profile(req, token=''):
-    return HttpResponseRedirect(reverse('edituserprofile'), args=(token.id,))
+    try:
+        token = Token.objects.get(token=token, date_created__gte=timezone.now() - timezone.timedelta(
+            minutes=settings.TOKEN_EXPIRY_TIME))
+        edited_person = Person.objects.get(id=token.person.id)
+        edited_person.name = req.POST.get('username', token.person.name)
+        if (req.POST.get('email_enabled', False)):
+          edited_person.email_enabled = True
+        else:
+          edited_person.email_enabled = False
+
+        edited_person.phone = req.POST.get('phone', token.person.phone)
+        print(req.POST.get('phone_enabled', False))
+        if (req.POST.get('phone_enabled', False)):
+          edited_person.phone_enabled = True
+        else:
+          edited_person.phone_enabled = False
+        edited_person.save()
+        messages.success(req, 'Successfull edit')
+    except Token.DoesNotExist:
+        token = None
+        messages.error(req, 'Token expired :(')
+        return render(req, 'sova/edituserprofile.html', {
+            'token': token,
+        })
+    except forms.ValidationError:
+        messages.error(req, 'Form validation problem :(')
+        return render(req, 'sova/edituserprofile.html', {
+            'token': token,
+        })
+
+    return HttpResponseRedirect(reverse('edituserprofile', args=(token.token,)))
 

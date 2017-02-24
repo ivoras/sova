@@ -8,11 +8,14 @@ Edit user profile
 <div class="alert alert-danger" role="alert">Your token has expired or is invalid, please try
     <a href="{% url 'getprofiletoken' %}">getting a new token</a></div>
 {% else %}
+{% for message in messages %}
+    <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+{% endfor %}
 <form action="{% url 'saveuserprofile' token.token %}" method="post">
     {% csrf_token %}
     <div class="input-group">
-        <label for="name">User name</label>
-        <input type="text" value="{{token.person.name}}" maxlength="100" name="name" id="name" class="form-control"/>
+        <label for="username">User name</label>
+        <input type="text" value="{{token.person.name}}" maxlength="100" name="username" id="username" class="form-control"/>
     </div>
     <div class="input-group">
         <label for="email_enabled">Is e-mail enabled?</label>
