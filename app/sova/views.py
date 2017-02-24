@@ -75,9 +75,6 @@ def get_profile_token(req, person=0):
 
 def send_profile_token(req):
     profile = req.POST.get('profile_email', False)
-    # no email address meaning just show the form
-    if not profile:
-        return HttpResponseRedirect(reverse('getprofiletoken'))
     # otherwise, validate it and retrieve the Person
     try:
         validate_email(profile)
