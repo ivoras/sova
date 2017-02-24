@@ -32,7 +32,7 @@ class Command(BaseCommand):
                     'server':  protocol + settings.ALLOWED_HOSTS[1] + port,  # there has to be a better way to do this
                 }
                 html_content = html.render(context)
-                msg = EmailMultiAlternatives(subject, plain_text, 'Hoo <donotreply@fielder.ivoras.net>', [recipient.email])
+                msg = EmailMultiAlternatives(subject, plain_text, settings.EMAIL_FROM, [recipient.email])
                 msg.attach_alternative(html_content, "text/html")
                 msg.send()
             es.sent = True

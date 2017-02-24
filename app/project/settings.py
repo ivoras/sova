@@ -134,6 +134,7 @@ USE_TZ = True
 
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 25
+EMAIL_FROM = 'Hoo <donotreply@fielder.ivoras.net>'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
