@@ -1,6 +1,7 @@
 import os
 import base64
 
+#from django.core.mail import EmailMultiAlternatives
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -83,6 +84,13 @@ def send_profile_token(req):
         person = get_object_or_404(Person, email=str(profile))
         token = Token(token=base64.urlsafe_b64encode(os.urandom(12)), person=person)
         token.save()
+        # send email, something along these lines
+        # subject, from_email, to = 'Token', settings.EMAIL_FROM, person.email
+        # text_content = 'Your token is ' + token.token
+        # html_content = '<a href="{% url edituserprofile token.token %} ">'
+        # msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+        # msg.attach_alternative(html_content, "text/html")
+        # msg.send()
         return HttpResponseRedirect(reverse('getprofiletoken', args=(person.id,)))
     except forms.ValidationError:
         return render(req, 'sova/getprofiletoken.html', {
@@ -104,22 +112,19 @@ def edit_user_profile(req, token=''):
 
 def save_user_profile(req, token=''):
     try:
-        token = Token.objects.get(token=token, date_created__gte=timezone.now() - timezone.timedelta(
+        retrieved_token = Token.objects.get(token=token, date_created__gte=timezone.now() - timezone.timedelta(
             minutes=settings.TOKEN_EXPIRY_TIME))
-        edited_person = Person.objects.get(id=token.person.id)
-        edited_person.name = req.POST.get('username', token.person.name)
-        if (req.POST.get('email_enabled', False)):
-          edited_person.email_enabled = True
+        retrieved_token.person.name = req.POST.get('username', retrieved_token.person.name)
+        if req.POST.get('email_enabled', False):
+            retrieved_token.person.email_enabled = True
         else:
-          edited_person.email_enabled = False
-
-        edited_person.phone = req.POST.get('phone', token.person.phone)
-        print(req.POST.get('phone_enabled', False))
-        if (req.POST.get('phone_enabled', False)):
-          edited_person.phone_enabled = True
+            retrieved_token.person.email_enabled = False
+        retrieved_token.person.phone = req.POST.get('phone', retrieved_token.person.phone)
+        if req.POST.get('phone_enabled', False):
+            retrieved_token.person.phone_enabled = True
         else:
-          edited_person.phone_enabled = False
-        edited_person.save()
+            retrieved_token.person.phone_enabled = False
+        retrieved_token.person.save()
         messages.success(req, 'Successfull edit')
     except Token.DoesNotExist:
         token = None
@@ -133,5 +138,5 @@ def save_user_profile(req, token=''):
             'token': token,
         })
 
-    return HttpResponseRedirect(reverse('edituserprofile', args=(token.token,)))
+    return HttpResponseRedirect(reverse('edituserprofile', args=(retrieved_token.token,)))
 
