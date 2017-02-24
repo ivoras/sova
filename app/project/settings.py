@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from django.contrib import messages
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -140,6 +142,15 @@ EMAIL_FROM = 'Hoo <donotreply@fielder.ivoras.net>'
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    ( os.path.join('static'), )
+)
+
+# Override for Bootstrap3
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger'
+}
 
 # Profile editing
 TOKEN_EXPIRY_TIME = 10
