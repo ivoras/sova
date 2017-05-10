@@ -132,6 +132,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+STATIC_URL = '/static/'
+
 # DATETIME_FORMAT = 'd.m.Y. H:i'
 
 EMAIL_HOST = 'localhost'

@@ -22,7 +22,7 @@ class EventAdmin(admin.ModelAdmin):
     inlines = ( EmailScheduleInline, ParticipationInline )
 
 class EmailScheduleAdmin(admin.ModelAdmin):
-    list_display = ('date', 'event', 'name', 'subject', 'sent', 'target')
+    list_display = ('date', 'event', 'name', 'subject', 'group', 'target', 'sent')
     list_filter = ('date', 'sent', 'group', 'target')
     search_fields = ('name', 'group__name', 'event__name', 'target')
 
