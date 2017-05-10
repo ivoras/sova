@@ -21,15 +21,18 @@ class Command(BaseCommand):
                 subject = "[%s] %s" % (es.event.mail_prefix, es.name)
             else:
                 subject = es.name
-            for recipient in es.group.persons.filter(email_enabled=True):
+            if es.target == EmailSchedule.SEND_EVERYONE:
+                recipients = es.group.persons.filter(email_enabled=True)
+            elif es.target == EmailSchedule.SEND_ACCEPTED:
+                recipients = es.group.persons.filter(email_enabled=True)
+
+            for recipient in recipients:
                 plain_text = "%s\n\n%s\n\n%s\n" % (es.event.header, es.message, es.event.footer)
                 html = get_template('sova/confirmationemail.html')
-                protocol = 'http://' # get this from settings?
-                port = ':8000' # get this from settings?
                 context = {
                     'person': recipient,
                     'schedule': es,
-                    'server':  protocol + settings.ALLOWED_HOSTS[1] + port,  # there has to be a better way to do this
+                    'server':  settings.SOVA_BASE_URL,
                 }
                 html_content = html.render(context)
                 msg = EmailMultiAlternatives(subject, plain_text, settings.EMAIL_FROM, [recipient.email])

@@ -1,0 +1,11 @@
+{% extends 'sova/base.html' %}
+{% block 'title' %}
+{{schedule.event.name}} - obavijest
+{% endblock %}
+{% block 'body' %}
+
+<h1>{{schedule.event.name}} - {{schedule.subject}}</h1>
+
+<p>Nažalost, sva mjesta su popunjena!</p>
+
+{% endblock %}

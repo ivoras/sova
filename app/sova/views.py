@@ -11,7 +11,7 @@ from django.utils import timezone
 from django.conf import settings
 from django.contrib import messages
 
-from .models import Person, Event, Participation, Token
+from .models import Person, Event, Participation, EmailSchedule, Token
 
 
 def index(req):
@@ -49,12 +49,28 @@ def vote(req, event, person):
     return HttpResponseRedirect(reverse('join', args=(person.pk, event.pk,)))
 
 
-def accept(req, event, person):
+def accept(req, schedule, person):
+    """
+    Shows event info and allows the user to accept.
+    """
+    schedule = get_object_or_404(EmailSchedule, pk=int(schedule))
     person = get_object_or_404(Person, pk=int(person))
-    event = get_object_or_404(Event, pk=int(event))
-    participation = Participation(person=person, event=event, accepted=True)
+    people_count = Participation.objects.filter(event=schedule.event, accepted=True).count()
+    if schedule.event.max_people and people_count >= schedule.event.max_people:
+        return render(req, 'sova/noroom.html', { 'person': person, 'schedule': schedule })
+    people_percent = int((people_count / schedule.event.max_people) * 100)
+    return render(req, 'sova/accept.html', { 'person': person, 'schedule': schedule, 'people_count': people_count, 'people_percent': people_percent })
+
+
+def confirm(req, schedule, person):
+    """
+    Shows event info and allows the user to accept.
+    """
+    schedule = get_object_or_404(EmailSchedule, pk=int(schedule))
+    person = get_object_or_404(Person, pk=int(person))
+    participation = Participation(person=person, event=schedule.event, accepted=True)
     participation.save()
-    return HttpResponseRedirect(reverse('join', args=(person.pk, event.pk,)))
+    return render(req, 'sova/confirm.html', { 'person': person, 'schedule': schedule, 'participation': participation })
 
 
 def get_profile_token(req, person=0):

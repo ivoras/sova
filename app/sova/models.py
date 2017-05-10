@@ -33,6 +33,7 @@ class Group(models.Model):
 
 class Event(models.Model):
     name = models.CharField(max_length=100)
+    hype_text = models.TextField()
     mail_prefix = models.CharField(max_length=100, blank=True, null=True)
     header = HTMLField(default="Hi,")
     footer = HTMLField(default="----")
@@ -40,6 +41,7 @@ class Event(models.Model):
     deadline_for_joining = models.DateTimeField(null=True, blank=True)
     schedules = models.ManyToManyField(Group, through='EmailSchedule')
     participations = models.ManyToManyField(Person, through='Participation')
+    max_people = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return u"%s %s" % (self.name, timezone.localtime(self.date).strftime('%d.%m.%Y. %H:%M'))
@@ -61,9 +63,17 @@ class EmailSchedule(models.Model):
         (SEND_PARTICIPATED, "Onima koji su sudjelovali"),
     )
 
+    TYPE_MESSAGE = 1
+    TYPE_INVITATION = 2
+    TYPE_CHOICES = (
+        (TYPE_MESSAGE, "Obavijest"),
+        (TYPE_INVITATION, "Pozivnica"),
+    )
+
     name = models.CharField(max_length=100)
     group = models.ForeignKey(Group)
     target = models.IntegerField(choices=SEND_CHOICES, default=SEND_EVERYONE)
+    type = models.IntegerField(choices=TYPE_CHOICES, default=TYPE_MESSAGE)
     event = models.ForeignKey(Event)
     date = models.DateTimeField()
     subject = models.CharField(max_length=200)

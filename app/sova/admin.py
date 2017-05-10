@@ -17,13 +17,13 @@ class ParticipationInline(admin.StackedInline):
     model = Participation
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('name', 'date')
+    list_display = ('name', 'mail_prefix', 'date')
     search_fields = ('name',)
     inlines = ( EmailScheduleInline, ParticipationInline )
 
 class EmailScheduleAdmin(admin.ModelAdmin):
-    list_display = ('date', 'event', 'name', 'subject', 'group', 'target', 'sent')
-    list_filter = ('date', 'sent', 'group', 'target')
+    list_display = ('date', 'event', 'name', 'subject', 'type', 'group', 'target', 'sent')
+    list_filter = ('date', 'sent', 'group', 'type', 'target')
     search_fields = ('name', 'group__name', 'event__name', 'target')
 
 class ParticipationAdmin(admin.ModelAdmin):

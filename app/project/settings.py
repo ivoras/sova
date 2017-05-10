@@ -109,8 +109,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 TINYMCE_DEFAULT_CONFIG = {
     'theme': 'advanced',
-    'theme_advanced_buttons1': 'bold,italic,underline,separator,bullist,numlist,separator,outdent,indent',
-    'theme_advanced_buttons2': 'undo,redo,separator,link,unlink,separator,code',
+    'theme_advanced_buttons1': 'bold,italic,underline,separator,bullist,numlist,separator,outdent,indent,separator,undo,redo,separator,link,unlink,separator,code',
+    'theme_advanced_buttons2': '',
     'theme_advanced_buttons3': '',
     'theme_advanced_toolbar_location': 'top',
     'theme_advanced_toolbar_align': 'left',
@@ -134,7 +134,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# DATETIME_FORMAT = 'd.m.Y. H:i'
+DATETIME_FORMAT = 'd.m.Y. H:i'
+
+SOVA_BASE_URL = 'http://fielder.ivoras.net:8000'
 
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 25
