@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import Person, Group, Event, EmailSchedule, Participation, Token
 
 class PersonAdmin(admin.ModelAdmin):
-    list_display = ('name', 'email', 'email_enabled')
+    list_display = ('name', 'email', 'email_enabled', 'phone_enabled')
     search_fields = ('name', 'email')
 
 class GroupAdmin(admin.ModelAdmin):

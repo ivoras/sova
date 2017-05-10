@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import bleach
 from django.db import models
 from django.utils import timezone
 from tinymce.models import HTMLField
@@ -13,7 +13,7 @@ class Person(models.Model):
     phone_enabled = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return "%s <%s>" % (self.name, self.email)
+        return u"%s <%s>" % (self.name, self.email)
 
     class Meta:
         ordering = ('name', )
@@ -42,7 +42,7 @@ class Event(models.Model):
     participations = models.ManyToManyField(Person, through='Participation')
 
     def __unicode__(self):
-        return "%s %s" % (self.name, timezone.localtime(self.date).strftime('%d.%m.%Y. %H:%M'))
+        return u"%s %s" % (self.name, timezone.localtime(self.date).strftime('%d.%m.%Y. %H:%M'))
 
 
 class EmailSchedule(models.Model):
@@ -55,8 +55,12 @@ class EmailSchedule(models.Model):
     sent = models.BooleanField(default=False)
     add_custom_link_before_footer = models.BooleanField(default=False)
 
+    def save(self, *args, **kwargs):
+        self.message = bleach.clean(self.message)
+        super(EmailSchedule, self).save(*args, **kwargs)
+
     def __unicode__(self):
-        return "%s (%s) @ %s" % (self.name, str(self.event), timezone.localtime(self.date).strftime('%d.%m.%Y. %H:%M'))
+        return u"%s (%s) @ %s" % (self.name, str(self.event), timezone.localtime(self.date).strftime('%d.%m.%Y. %H:%M'))
 
     class Meta:
         ordering = ('-date', )
@@ -73,7 +77,7 @@ class Participation(models.Model):
     note = models.TextField(blank=True, null=True)
 
     def __unicode__(self):
-        return "%s, %s: %s" % (self.person.name, self.event.name, '✓' if self.participated else '-')
+        return u"%s, %s: %s" % (self.person.name, self.event.name, u'✓' if self.participated else u'-')
 
 
 class Token(models.Model):
@@ -82,4 +86,6 @@ class Token(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
-        return "%s, %s: %s" % (self.person.name, self.token, self.date_created)
+        return u"%s, %s: %s" % (self.person.name, self.token, self.date_created)
+
+
