@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import bleach
+from util import bleach_htmlfield
 from django.db import models
 from django.utils import timezone
 from tinymce.models import HTMLField
@@ -46,8 +46,24 @@ class Event(models.Model):
 
 
 class EmailSchedule(models.Model):
+    SEND_EVERYONE = 1
+    SEND_ACCEPTED = 2
+    SEND_NOT_ACCEPTED = 3
+    SEND_NO_REQUIREMENTS = 4
+    SEND_YES_REQUIREMENTS = 5
+    SEND_PARTICIPATED = 6
+    SEND_CHOICES = (
+        (SEND_EVERYONE, "Svima u grupi"),
+        (SEND_ACCEPTED, "Onima koji su prihvatili"),
+        (SEND_NOT_ACCEPTED, "Onima koji nisu prihvatili"),
+        (SEND_NO_REQUIREMENTS, "Onima koji nemaju preduvjete"),
+        (SEND_YES_REQUIREMENTS, "Onima koji imaju preduvjete"),
+        (SEND_PARTICIPATED, "Onima koji su sudjelovali"),
+    )
+
     name = models.CharField(max_length=100)
     group = models.ForeignKey(Group)
+    target = models.IntegerField(choices=SEND_CHOICES, default=SEND_EVERYONE)
     event = models.ForeignKey(Event)
     date = models.DateTimeField()
     subject = models.CharField(max_length=200)
@@ -56,7 +72,7 @@ class EmailSchedule(models.Model):
     add_custom_link_before_footer = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
-        self.message = bleach.clean(self.message)
+        self.message = bleach_htmlfield(self.message)
         super(EmailSchedule, self).save(*args, **kwargs)
 
     def __unicode__(self):
