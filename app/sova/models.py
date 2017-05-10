@@ -34,8 +34,8 @@ class Group(models.Model):
 class Event(models.Model):
     name = models.CharField(max_length=100)
     mail_prefix = models.CharField(max_length=100, blank=True, null=True)
-    header = models.TextField(default="Hi,")
-    footer = models.TextField(default="----")
+    header = HTMLField(default="Hi,")
+    footer = HTMLField(default="----")
     date = models.DateTimeField()
     deadline_for_joining = models.DateTimeField(null=True, blank=True)
     schedules = models.ManyToManyField(Group, through='EmailSchedule')
