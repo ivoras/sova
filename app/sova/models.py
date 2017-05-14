@@ -65,16 +65,18 @@ class EmailSchedule(models.Model):
 
     TYPE_MESSAGE = 1
     TYPE_INVITATION = 2
+    TYPE_EXITPOLL = 3
     TYPE_CHOICES = (
         (TYPE_MESSAGE, "Obavijest"),
         (TYPE_INVITATION, "Pozivnica"),
+        (TYPE_EXITPOLL, "Anketa nakon događaja")
     )
 
     name = models.CharField(max_length=100)
     group = models.ForeignKey(Group)
     target = models.IntegerField(choices=SEND_CHOICES, default=SEND_EVERYONE)
-    type = models.IntegerField(choices=TYPE_CHOICES, default=TYPE_MESSAGE)
     event = models.ForeignKey(Event)
+    type = models.IntegerField(choices=TYPE_CHOICES, default=TYPE_MESSAGE)
     date = models.DateTimeField()
     subject = models.CharField(max_length=200)
     message = HTMLField()

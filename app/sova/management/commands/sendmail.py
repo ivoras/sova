@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.utils.html import strip_tags
 from django.template.loader import get_template
 from django.conf import settings
+import logging
 
 from sova.models import Person, Group, Event, EmailSchedule
 
@@ -25,7 +26,7 @@ class Command(BaseCommand):
             if es.target == EmailSchedule.SEND_EVERYONE:
                 recipients = es.group.persons.filter(email_enabled=True)
             elif es.target == EmailSchedule.SEND_ACCEPTED:
-                recipients = es.group.persons.filter(email_enabled=True)
+                recipients = es.group.persons.filter(email_enabled=True) & Person.objects.filter(participation__event=es.event, participation__accepted=True)
 
             for recipient in recipients:
                 plain_text = "%s\n\n%s\n\n%s\n" % (strip_tags(es.event.header), strip_tags(es.message), strip_tags(es.event.footer))
@@ -39,5 +40,6 @@ class Command(BaseCommand):
                 msg = EmailMultiAlternatives(subject, plain_text, settings.EMAIL_FROM, [recipient.email])
                 msg.attach_alternative(html_content, "text/html")
                 msg.send()
+                self.stdout.write("Sent '%s' to '%s'" % (subject, recipient.email))
             es.sent = True
             es.save()
