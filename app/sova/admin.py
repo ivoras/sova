@@ -27,7 +27,7 @@ class EmailScheduleAdmin(admin.ModelAdmin):
     search_fields = ('name', 'group__name', 'event__name', 'target')
 
 class ParticipationAdmin(admin.ModelAdmin):
-    list_display = ('person', 'event', 'grade', 'participated')
+    list_display = ('person', 'event', 'poll_grade', 'participated')
 
 class TokenAdmin(admin.ModelAdmin):
     list_display = ('token', 'person','date_created')

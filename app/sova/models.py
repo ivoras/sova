@@ -99,8 +99,13 @@ class Participation(models.Model):
     requirements_done = models.BooleanField(default=False) # Participation requirements (e.g. payment) have been satisfied
     participated = models.BooleanField(default=False)
     accepted = models.BooleanField(default=False) # They probably won't open the link if they don't want to participate, but we still need to track OR change this into an autoaccept link
-    grade = models.IntegerField(blank=True, null=True)
-    note = models.TextField(blank=True, null=True)
+
+    poll_grade = models.IntegerField(blank=True, null=True)
+    poll_best = models.TextField(blank=True, null=True)
+    poll_worst = models.TextField(blank=True, null=True)
+    poll_change = models.TextField(blank=True, null=True)
+    poll_futureorg = models.BooleanField(default=False)
+    poll_note = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return u"%s, %s: %s" % (self.person.name, self.event.name, u'✓' if self.participated else u'-')
@@ -113,5 +118,4 @@ class Token(models.Model):
 
     def __str__(self):
         return u"%s, %s: %s" % (self.person.name, self.token, self.date_created)
-
 
