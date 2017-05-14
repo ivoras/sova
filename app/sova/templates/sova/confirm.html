@@ -1,6 +1,6 @@
 {% extends 'sova/base.html' %}
 {% block 'title' %}
-{{schedule.event.name}} - Pozivnica
+{{schedule.event.name}} - Potvrda sudjelovanja
 {% endblock %}
 {% block 'body' %}
 
@@ -12,16 +12,14 @@
         <li role="presentation"><a href="/contact">Contact</a></li>
         </ul>
     </nav>
-    <h3 class="text-muted">Pozivnica za {{ person.name }}</h3>
+    <h3 class="text-muted">Potvrda za {{ person.name }}</h3>
     </div>
 
     <div class="jumbotron">
     <h1>{{ schedule.event.name }}</h1>
     <p class="lead">{{ schedule.event.hype_text }}</p>
     <p class="lead" style="text-align: center">Datum: <b style="white-space: nowrap">{{ schedule.event.date }}</b></p>
-    <p style="text-align: center"><a class="btn btn-lg btn-success" href="{{server}}{% url 'confirm' schedule.id person.id %}" role="button">Dolazim obavezno</a></p>
-    <p>Klikom na "Dolazim obavezno" se obvezujem da ću zapravo i doći, te da pristajem na cijenu kako je
-        objašnjeno u pozivnici.</p>
+    <p class="lead text-success">Čestitamo što ste odabrali sudjelovati u iskustvu! Dobiti ćete dodatne upute na e-mail!</p>
     </div>
 
     <div class="row marketing">
@@ -38,31 +36,10 @@
     </div>
     </div>
 
-    {% if schedule.event.max_people %}
-    <div class="row marketing">
-    <div class="col-lg-12">
-        <div class="alert alert-warning" role="alert">Maksimalni broj ljudi koji može sudjelovati je <b>{{ schedule.event.max_people }}</b>!</div>
-        <div class="progress">
-        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="{{ people_count }}" aria-valuemin="0" aria-valuemax="{{ schedule.event.max_people }}" style="width: {{people_percent}}%;" style="min-width: 2em">{{ people_percent }}%</div>
-        </div>
-        <p>Broj ljudi koji su potvrdili dolazak: {{ people_count }}.</p>
-    </div>
-    </div>
-    
-    {% endif %}
-
-    <div class="row marketing">
-    <div class="col-lg-12">
-        <h4>Tekst pozivnice</h4>
-        <p>{{ schedule.message|safe }}</p>
-    </div>
-    </div>
-
     <footer class="footer">
     <p>&copy; NLP Hrvatska &amp; Ideja na kvadrat</p>
     </footer>
 
 </div> <!-- /container -->
-
 
 {% endblock %}

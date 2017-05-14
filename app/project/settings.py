@@ -142,3 +142,5 @@ EMAIL_HOST = 'localhost'
 EMAIL_PORT = 25
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_FROM = 'Hoo <donotreply@fielder.ivoras.net>'
+
+EMAIL_ADMIN = 'ivoras@gmail.com'

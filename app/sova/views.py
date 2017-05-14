@@ -1,15 +1,17 @@
 import os
 import base64
 
-#from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.core.validators import validate_email
 from django import forms
 from django.utils import timezone
+from django.utils.html import strip_tags
 from django.conf import settings
 from django.contrib import messages
+from django.template.loader import get_template
 
 from .models import Person, Event, Participation, EmailSchedule, Token
 
@@ -59,19 +61,68 @@ def accept(req, schedule, person):
     if schedule.event.max_people and people_count >= schedule.event.max_people:
         return render(req, 'sova/noroom.html', { 'person': person, 'schedule': schedule })
     people_percent = int((people_count / schedule.event.max_people) * 100)
+
+    try:
+        participation = Participation.objects.get(person=person, event=schedule.event)
+        if participation.accepted:
+            return render(req, 'sova/unaccept.html', { 'person': person, 'schedule': schedule, 'people_count': people_count, 'people_percent': people_percent })
+    except Participation.DoesNotExist:
+        pass
+
     return render(req, 'sova/accept.html', { 'person': person, 'schedule': schedule, 'people_count': people_count, 'people_percent': people_percent })
 
 
 def confirm(req, schedule, person):
     """
-    Shows event info and allows the user to accept.
+    Notifies the user he/she has confirmed attendance.
     """
     schedule = get_object_or_404(EmailSchedule, pk=int(schedule))
     person = get_object_or_404(Person, pk=int(person))
-    participation = Participation(person=person, event=schedule.event, accepted=True)
+
+    try:
+        participation = Participation.objects.get(person=person, event=schedule.event)
+        participation.accepted = True
+    except Participation.DoesNotExist:
+        participation = Participation(person=person, event=schedule.event, accepted=True)
     participation.save()
+
+    tpl = get_template('sova/confirmemail.html')
+    html = tpl.render({ 'person': person, 'schedule': schedule, 'participation': participation, 'email_admin': settings.EMAIL_ADMIN })
+    subject = "[%s] %s - potvrda!" % (schedule.event.mail_prefix, schedule.name)
+    plain_text = strip_tags(html)
+
+    msg = EmailMultiAlternatives(subject, plain_text, settings.EMAIL_FROM, [person.email])
+    msg.attach_alternative(html, "text/html")
+    msg.send()
+
     return render(req, 'sova/confirm.html', { 'person': person, 'schedule': schedule, 'participation': participation })
 
+
+def unaccept(req, schedule, person):
+    """
+    Notifies the user he/she has canceled attendance.
+    """
+    schedule = get_object_or_404(EmailSchedule, pk=int(schedule))
+    person = get_object_or_404(Person, pk=int(person))
+
+    try:
+        participation = Participation.objects.get(person=person, event=schedule.event)
+        participation.accepted = False
+    except Participation.DoesNotExist:
+        participation = Participation(person=person, event=schedule.event, accepted=False)
+    participation.save()
+
+    tpl = get_template('sova/unacceptemail.html')
+    html = tpl.render({ 'person': person, 'schedule': schedule, 'participation': participation, 'email_admin': settings.EMAIL_ADMIN })
+    subject = "[%s] %s - otkazivanje" % (schedule.event.mail_prefix, schedule.name)
+    plain_text = strip_tags(html)
+
+    msg = EmailMultiAlternatives(subject, plain_text, settings.EMAIL_FROM, [person.email])
+    msg.attach_alternative(html, "text/html")
+    msg.send()
+
+    return render(req, 'sova/unacceptconfirm.html', { 'person': person, 'schedule': schedule, 'participation': participation })
+    
 
 def get_profile_token(req, person=0):
     try:

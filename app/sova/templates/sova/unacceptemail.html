@@ -1,0 +1,25 @@
+{% extends 'sova/base.html' %}
+{% block 'title' %}
+{% if schedule.type == 1 %}{{schedule.event.name}} - obavijest - {{schedule.subject}}{% endif %}
+{% if schedule.type == 2 %}{{schedule.event.name}} - pozivnica - {{schedule.subject}}{% endif %}
+{% endblock %}
+{% block 'body' %}
+
+<h1>{{schedule.subject}}{% if schedule.type == 2 %} - Pozivnica!!!{% endif %}</h1>
+
+<header>{{schedule.event.header|safe}}</header>
+<div>{{schedule.message|safe}}</div>
+
+{% if schedule.type == 2 %}
+    <p>Ovo je pozivnica na događaj koji će se održati {{ schedule.event.date }}. {% if schedule.event.deadline_for_joining %}Odluku o dolasku trebate
+        donijeti do {{ schedule.event.deadline_for_joining }}.{% endif %} Kad se odlučite, kliknite na link ovdje:</p>
+    {# Accept / no-accept #}
+    <p><a style="font-size: 1.5em" href="{{server}}{% url 'accept' schedule.id person.id %}">Želim znati dodatne informacije!</a></p>
+    {% if schedule.event.max_people %}
+    <p>Požurite! Maksimalan broj ljudi na ovom iskustvu je {{ schedule.event.max_people }}!</p>
+    {% endif %}
+{% endif %}
+
+<footer>{{schedule.event.footer|safe}}</footer>
+
+{% endblock %}

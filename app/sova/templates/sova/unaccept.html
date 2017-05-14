@@ -1,6 +1,6 @@
 {% extends 'sova/base.html' %}
 {% block 'title' %}
-{{schedule.event.name}} - Pozivnica
+{{schedule.event.name}} - Otkazivanje
 {% endblock %}
 {% block 'body' %}
 
@@ -12,16 +12,15 @@
         <li role="presentation"><a href="/contact">Contact</a></li>
         </ul>
     </nav>
-    <h3 class="text-muted">Pozivnica za {{ person.name }}</h3>
+    <h3 class="text-muted">Otkazivanje za {{ person.name }}</h3>
     </div>
 
     <div class="jumbotron">
     <h1>{{ schedule.event.name }}</h1>
     <p class="lead">{{ schedule.event.hype_text }}</p>
     <p class="lead" style="text-align: center">Datum: <b style="white-space: nowrap">{{ schedule.event.date }}</b></p>
-    <p style="text-align: center"><a class="btn btn-lg btn-success" href="{{server}}{% url 'confirm' schedule.id person.id %}" role="button">Dolazim obavezno</a></p>
-    <p>Klikom na "Dolazim obavezno" se obvezujem da ću zapravo i doći, te da pristajem na cijenu kako je
-        objašnjeno u pozivnici.</p>
+    <p style="text-align: center"><a class="btn btn-lg btn-danger" href="{{server}}{% url 'unaccept' schedule.id person.id %}" role="button">Otkazujem dolazak</a></p>
+    <p>Klikom na "Otkazujem dolazak" potvrđujem da neću doći na ovo iskustvo.</p>
     </div>
 
     <div class="row marketing">

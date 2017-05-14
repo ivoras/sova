@@ -1,6 +1,7 @@
 from django.core.mail import EmailMultiAlternatives
 from django.core.management.base import BaseCommand
 from django.utils import timezone
+from django.utils.html import strip_tags
 from django.template.loader import get_template
 from django.conf import settings
 
@@ -27,8 +28,8 @@ class Command(BaseCommand):
                 recipients = es.group.persons.filter(email_enabled=True)
 
             for recipient in recipients:
-                plain_text = "%s\n\n%s\n\n%s\n" % (es.event.header, es.message, es.event.footer)
-                html = get_template('sova/confirmationemail.html')
+                plain_text = "%s\n\n%s\n\n%s\n" % (strip_tags(es.event.header), strip_tags(es.message), strip_tags(es.event.footer))
+                html = get_template('sova/acceptemail.html')
                 context = {
                     'person': recipient,
                     'schedule': es,
