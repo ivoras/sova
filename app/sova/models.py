@@ -67,6 +67,9 @@ class Event(models.Model):
     def __str__(self):
         return u"%s %s" % (self.name, timezone.localtime(self.date).strftime('%d.%m.%Y. %H:%M'))
 
+    class Meta:
+        ordering = ('-date', )
+
 
 class EmailSchedule(models.Model):
     SEND_EVERYONE = 1
@@ -134,6 +137,13 @@ class Participation(models.Model):
     def __str__(self):
         return u"%s, %s: %s" % (self.person.name, self.event.name, u'✓' if self.participated else u'-')
 
+
+class GroupAutoParticipation(models.Model):
+    group = models.ForeignKey(Group)
+    person = models.ForeignKey(Person)
+
+    def __str__(self):
+        return "%s: %s" % (self.group.name, self.person.name)
 
 class Token(models.Model):
     person = models.ForeignKey(Person)

@@ -11,11 +11,13 @@
 <div>{{schedule.message|safe}}</div>
 
 {% if schedule.type == 2 %}
-    <p>Ovo je pozivnica na događaj koji će se održati {{ schedule.event.date }}. {% if schedule.event.deadline_for_joining %}Odluku o dolasku trebate
+    <p>Ovo je pozivnica na događaj koji će se održati <b>{{ schedule.event.date }}</b>. {% if schedule.event.deadline_for_joining %}Odluku o dolasku trebate
         donijeti <b>do {{ schedule.event.deadline_for_joining }}</b>.{% endif %} Kad se odlučite, kliknite na link ovdje:</p>
     {# Accept / no-accept #}
     <p><a style="font-size: 1.5em" href="{{server}}{% url 'accept' schedule.id person.id %}">Želim znati dodatne informacije!</a></p>
-    {% if schedule.event.max_people %}
+    {% if auto_accepted %}
+    <p>Automatski ste prijavljeni za ovo iskustvo! Ne morate ništa raditi (niti išta klikati) do sljedeće obavijesti.</p>
+    {% elif schedule.event.max_people %}
     <p>Požurite! Maksimalan broj ljudi na ovom iskustvu je {{ schedule.event.max_people }}!</p>
     {% endif %}
 {% endif %}

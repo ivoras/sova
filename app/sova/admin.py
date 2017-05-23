@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Person, Group, Event, EmailSchedule, Participation, Token
+from .models import Person, Group, Event, EmailSchedule, Participation, GroupAutoParticipation, Token
 
 class PersonAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'email_enabled', 'phone_enabled')
@@ -53,6 +53,11 @@ class EmailScheduleAdmin(admin.ModelAdmin):
 
 class ParticipationAdmin(admin.ModelAdmin):
     list_display = ('person', 'event', 'poll_grade', 'participated')
+    list_filter = ('person', 'event', 'poll_grade', 'participated')
+
+class GroupAutoParticipationAdmin(admin.ModelAdmin):
+    list_display = ('group', 'person')
+    list_filter = ('group', 'person')
 
 class TokenAdmin(admin.ModelAdmin):
     list_display = ('token', 'person','date_created')
@@ -62,4 +67,5 @@ admin.site.register(Group, GroupAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(EmailSchedule, EmailScheduleAdmin)
 admin.site.register(Participation, ParticipationAdmin)
+admin.site.register(GroupAutoParticipation, GroupAutoParticipationAdmin)
 admin.site.register(Token, TokenAdmin)

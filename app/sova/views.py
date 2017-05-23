@@ -1,5 +1,6 @@
-import os
 import base64
+from datetime import datetime
+import os
 
 from django.core.mail import EmailMultiAlternatives
 from django.shortcuts import render, get_object_or_404
@@ -60,6 +61,9 @@ def accept(req, schedule, person):
     people_count = Participation.objects.filter(event=schedule.event, accepted=True).count()
     if schedule.event.max_people and people_count >= schedule.event.max_people:
         return render(req, 'sova/noroom.html', { 'person': person, 'schedule': schedule })
+    if datetime.today() > schedule.event.date or (schedule.event.deadline_for_joining and datetime.today() > schedule.event.deadline_for_joining):
+        return render(req, 'sova/toolate.html', { 'person': person, 'schedule': schedule })
+
     people_percent = int((people_count / schedule.event.max_people) * 100) if schedule.event.max_people else 0
 
     try:

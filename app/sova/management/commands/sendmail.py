@@ -6,7 +6,7 @@ from django.template.loader import get_template
 from django.conf import settings
 import logging
 
-from sova.models import Person, Group, Event, EmailSchedule
+from sova.models import Person, Group, Event, EmailSchedule, GroupAutoParticipation, Participation
 
 class Command(BaseCommand):
     help = 'Sends e-mails'
@@ -23,9 +23,17 @@ class Command(BaseCommand):
                 subject = "[%s] %s" % (es.event.mail_prefix, es.name)
             else:
                 subject = es.name
+            auto_accepted_ids = set()
             if es.target == EmailSchedule.SEND_EVERYONE:
                 recipients = es.group.persons.filter(email_enabled=True)
                 template_file = 'sova/acceptemail.html'
+                if es.type == EmailSchedule.TYPE_INVITATION:
+                    auto_participation_recipients = recipients & Person.objects.filter(groupautoparticipation__group=es.group)
+                    for r in auto_participation_recipients:
+                        if Participation.objects.filter(event=es.event, person=r).count() == 0:
+                            p = Participation(event=es.event, person=r, accepted=True)
+                            p.save()
+                        auto_accepted_ids.add(r.id)
             elif es.target == EmailSchedule.SEND_ACCEPTED:
                 recipients = es.group.persons.filter(email_enabled=True) & Person.objects.filter(participation__event=es.event, participation__accepted=True)
                 template_file = 'sova/acceptemail.html'
@@ -52,6 +60,8 @@ class Command(BaseCommand):
                     'schedule': es,
                     'server':  settings.SOVA_BASE_URL,
                 }
+                if es.type == EmailSchedule.TYPE_INVITATION:
+                    context['auto_accepted'] = recipient.id in auto_accepted_ids
                 html_content = html.render(context)
                 msg = EmailMultiAlternatives(subject, plain_text, settings.EMAIL_FROM, [recipient.email])
                 msg.attach_alternative(html_content, "text/html")
