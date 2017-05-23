@@ -2,10 +2,31 @@
 from .util import bleach_htmlfield
 from django.db import models
 from django.utils import timezone
+import random
 from tinymce.models import HTMLField
 
 
+def random_p_pkey():
+    random.seed()
+    while True:
+        n = random.randrange(0xfffffff)
+        try:
+            p = Person.objects.get(id=n)
+        except Person.DoesNotExist:
+            return n
+
+def random_es_pkey():
+    random.seed()
+    while True:
+        n = random.randrange(0xfffffff)
+        try:
+            es = EmailSchedule.objects.get(id=n)
+        except EmailSchedule.DoesNotExist:
+            return n
+
+
 class Person(models.Model):
+    id = models.IntegerField(primary_key=True, default=random_p_pkey)
     name = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
     email_enabled = models.BooleanField(default=True)
@@ -65,13 +86,14 @@ class EmailSchedule(models.Model):
 
     TYPE_MESSAGE = 1
     TYPE_INVITATION = 2
-    TYPE_EXITPOLL = 3
+    TYPE_EXIT_POLL = 3
     TYPE_CHOICES = (
         (TYPE_MESSAGE, "Obavijest"),
         (TYPE_INVITATION, "Pozivnica"),
-        (TYPE_EXITPOLL, "Anketa nakon događaja")
+        (TYPE_EXIT_POLL, "Anketa nakon događaja")
     )
 
+    id = models.IntegerField(primary_key=True, default=random_es_pkey)
     name = models.CharField(max_length=100)
     group = models.ForeignKey(Group)
     target = models.IntegerField(choices=SEND_CHOICES, default=SEND_EVERYONE)

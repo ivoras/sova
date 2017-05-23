@@ -60,7 +60,7 @@ def accept(req, schedule, person):
     people_count = Participation.objects.filter(event=schedule.event, accepted=True).count()
     if schedule.event.max_people and people_count >= schedule.event.max_people:
         return render(req, 'sova/noroom.html', { 'person': person, 'schedule': schedule })
-    people_percent = int((people_count / schedule.event.max_people) * 100)
+    people_percent = int((people_count / schedule.event.max_people) * 100) if schedule.event.max_people else 0
 
     try:
         participation = Participation.objects.get(person=person, event=schedule.event)
@@ -122,6 +122,18 @@ def unaccept(req, schedule, person):
     msg.send()
 
     return render(req, 'sova/unacceptconfirm.html', { 'person': person, 'schedule': schedule, 'participation': participation })
+
+
+def exitpoll(req, schedule, person):
+    """
+    Shows event exit poll.
+    """
+    schedule = get_object_or_404(EmailSchedule, pk=int(schedule))
+    person = get_object_or_404(Person, pk=int(person))
+    people_count = Participation.objects.filter(event=schedule.event, accepted=True, participated=True).count()
+    people_percent = int((people_count / schedule.event.max_people) * 100) if schedule.event.max_people else 0
+    participation = get_object_or_404(Participation, person=person, event=schedule.event)
+    return render(req, 'sova/exitpoll.html', { 'person': person, 'schedule': schedule, 'people_count': people_count, 'people_percent': people_percent })
     
 
 def get_profile_token(req, person=0):

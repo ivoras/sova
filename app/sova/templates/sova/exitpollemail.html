@@ -1,0 +1,15 @@
+{% extends 'sova/base.html' %}
+{% block 'title' %}
+{{schedule.event.name}} - anketa - {{schedule.subject}}
+{% endblock %}
+{% block 'body' %}
+
+<h1>{{schedule.subject}} - Vaše mišljenje?</h1>
+
+<header>{{schedule.event.header|safe}}</header>
+
+<p><a style="font-size: 1.5em" href="{{server}}{% url 'exitpoll' schedule.id person.id %}">Što mislite o ovom iskustvu?</a></p>
+
+<footer>{{schedule.event.footer|safe}}</footer>
+
+{% endblock %}

@@ -19,7 +19,9 @@
     <h1>{{ schedule.event.name }}</h1>
     <p class="lead">{{ schedule.event.hype_text }}</p>
     <p class="lead" style="text-align: center">Datum: <b style="white-space: nowrap">{{ schedule.event.date }}</b></p>
-    <p style="text-align: center"><a class="btn btn-lg btn-success" href="{{server}}{% url 'confirm' schedule.id person.id %}" role="button">Dolazim obavezno</a></p>
+    <form method="GET" action="{{server}}{% url 'confirm' schedule.id person.id %}">
+    <p style="text-align: center"><button class="btn btn-lg btn-success" type="submit">Dolazim obavezno</button></p>
+    </form>
     <p>Klikom na "Dolazim obavezno" se obvezujem da ću zapravo i doći, te da pristajem na cijenu kako je
         objašnjeno u pozivnici.</p>
     </div>

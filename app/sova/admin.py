@@ -5,6 +5,17 @@ from .models import Person, Group, Event, EmailSchedule, Participation, Token
 class PersonAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'email_enabled', 'phone_enabled')
     search_fields = ('name', 'email')
+    fieldsets = (
+        (None, {
+            'fields': ('name',)
+        }),
+        ("Kontakt e-mail", {
+            'fields': ('email', 'email_enabled')
+        }),
+        ("Kontakt telefon", {
+            'fields': ('phone', 'phone_enabled')
+        })
+    )
 
 class GroupAdmin(admin.ModelAdmin):
     list_display = ('name', 'email_enabled')
@@ -25,6 +36,20 @@ class EmailScheduleAdmin(admin.ModelAdmin):
     list_display = ('date', 'event', 'name', 'subject', 'type', 'group', 'target', 'sent')
     list_filter = ('date', 'sent', 'group', 'type', 'target')
     search_fields = ('name', 'group__name', 'event__name', 'target')
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'event')
+        }),
+        ("Datum slanja maila", {
+            'fields': ('date',)
+        }),
+        ("Ciljana publika", {
+            'fields': ('group', 'target', 'type')
+        }),
+        ("Poruka za slanje", {
+            'fields': ('subject', 'message')
+        })
+    )
 
 class ParticipationAdmin(admin.ModelAdmin):
     list_display = ('person', 'event', 'poll_grade', 'participated')

@@ -38,9 +38,9 @@ class Command(BaseCommand):
             elif es.target == EmailSchedule.SEND_NO_REQUIREMENTS:
                 recipients = es.group.persons.filter(email_enabled=True) & Person.objects.filter(participation__event=es.event, participation__requirements_done=False)
                 template_file = 'sova/acceptemail.html'
-            elif es.target == EmailSchedule.SEND_PARTICIPATED:
+            elif es.target == EmailSchedule.SEND_PARTICIPATED and es.type == EmailSchedule.TYPE_EXIT_POLL:
                 recipients = es.group.persons.filter(email_enabled=True) & Person.objects.filter(participation__event=es.event, participation__participated=True)
-                template_file = 'sova/acceptemail.html'
+                template_file = 'sova/exitpollemail.html'
             else:
                 self.stdout.write("Unknown schedule target: %s" % es.target)
                 
