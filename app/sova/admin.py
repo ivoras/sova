@@ -35,7 +35,7 @@ class EventAdmin(admin.ModelAdmin):
 
 class EmailScheduleAdmin(admin.ModelAdmin):
     list_display = ('date', 'event', 'name', 'subject', 'type', 'group', 'target', 'sent')
-    list_filter = ('date', 'sent', 'group', 'type', 'target')
+    list_filter = ('event__name', 'date', 'sent', 'group', 'type', 'target')
     search_fields = ('name', 'group__name', 'event__name', 'target')
     fieldsets = (
         (None, {

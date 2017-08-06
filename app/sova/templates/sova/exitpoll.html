@@ -1,106 +1,88 @@
-{% extends 'sova/base.html' %}
-{% block 'title' %}
-{{schedule.event.name}} - Anketa
-{% endblock %}
-{% block 'body' %}
+{% extends 'sova/basepage.html' %}
+{% block 'title' %}{{schedule.event.name}} - Anketa za {{ person.name }}{% endblock %}
+{% block 'container' %}
 
-<div class="container">
-    <div class="header clearfix">
-    <nav>
-        <ul class="nav nav-pills pull-right">
-        <li role="presentation" class="active"><a href="/">HooOrg home</a></li>
-        <li role="presentation"><a href="/contact">Contact</a></li>
-        </ul>
-    </nav>
-    <h3 class="text-muted">Anketa za {{ person.name }}</h3>
+<div class="jumbotron">
+<h1>{{ schedule.event.name }}</h1>
+<p class="lead">{{ schedule.event.hype_text }}</p>
+<p class="lead" style="text-align: center">Datum: <b style="white-space: nowrap">{{ schedule.event.date }}</b></p>
+</div>
+
+<div class="row marketing">
+<div class="col-lg-12">
+
+    <form class="form-horizontal" method="POST" action="{{server}}{% url 'exitpollsave' schedule.id person.id %}">
+    {% csrf_token %}
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Ocjena iskustva (10=najbolje)</label>
+        <div class="col-sm-9" style="padding-top: 15px">
+            <input type="radio" name="grade" value="1" id="grade1"{% if participation.poll_grade == 1 %}checked="1"{% endif %}>
+            <label for="grade1">1 </label>
+            <input type="radio" name="grade" value="2" id="grade2"{% if participation.poll_grade == 2 %}checked="1"{% endif %}>
+            <label for="grade2">2 </label>
+            <input type="radio" name="grade" value="3" id="grade3"{% if participation.poll_grade == 3 %}checked="1"{% endif %}>
+            <label for="grade3">3 </label>
+            <input type="radio" name="grade" value="4" id="grade4"{% if participation.poll_grade == 4 %}checked="1"{% endif %}>
+            <label for="grade4">4 </label>
+            <input type="radio" name="grade" value="5" id="grade5"{% if participation.poll_grade == 5 %}checked="1"{% endif %}>
+            <label for="grade5">5 </label>
+            <input type="radio" name="grade" value="6" id="grade6"{% if participation.poll_grade == 6 %}checked="1"{% endif %}>
+            <label for="grade6">6 </label>
+            <input type="radio" name="grade" value="7" id="grade7"{% if participation.poll_grade == 7 %}checked="1"{% endif %}>
+            <label for="grade7">7 </label>
+            <input type="radio" name="grade" value="8" id="grade8"{% if participation.poll_grade == 8 %}checked="1"{% endif %}>
+            <label for="grade9">8 </label>
+            <input type="radio" name="grade" value="9" id="grade9"{% if participation.poll_grade == 9 %}checked="1"{% endif %}>
+            <label for="grade10">9 </label>
+            <input type="radio" name="grade" value="10" id="grade9"{% if participation.poll_grade == 10 %}checked="1"{% endif %}>
+            <label for="grade10">10</label>
+        </div>
     </div>
 
-    <div class="jumbotron">
-    <h1>{{ schedule.event.name }}</h1>
-    <p class="lead">{{ schedule.event.hype_text }}</p>
-    <p class="lead" style="text-align: center">Datum: <b style="white-space: nowrap">{{ schedule.event.date }}</b></p>
+    <div class="form-group">
+        <label for="best" class="col-sm-3 control-label">Što je bilo najbolje u ovom iskustvu?</label>
+        <div class="col-sm-9">
+            <textarea name="best" id="best" class="form-control" rows="3">{{ participation.poll_best }}</textarea>
+        </div>
     </div>
 
-    <div class="row marketing">
-    <div class="col-lg-12">
-
-        <form class="form-horizontal" method="POST" action="{{server}}{% url 'exitpollsave' schedule.id person.id %}">
-        {% csrf_token %}
-
-        <div class="form-group">
-            <label class="col-sm-3 control-label">Ocjena iskustva (10=najbolje)</label>
-            <div class="col-sm-9" style="padding-top: 15px">
-                <input type="radio" name="grade" value="1" id="grade1">
-                <label for="grade1">1 </label>
-                <input type="radio" name="grade" value="2" id="grade2">
-                <label for="grade2">2 </label>
-                <input type="radio" name="grade" value="3" id="grade3">
-                <label for="grade3">3 </label>
-                <input type="radio" name="grade" value="4" id="grade4">
-                <label for="grade4">4 </label>
-                <input type="radio" name="grade" value="5" id="grade5">
-                <label for="grade5">5 </label>
-                <input type="radio" name="grade" value="6" id="grade6">
-                <label for="grade6">6 </label>
-                <input type="radio" name="grade" value="7" id="grade7">
-                <label for="grade7">7 </label>
-                <input type="radio" name="grade" value="8" id="grade8">
-                <label for="grade9">9 </label>
-                <input type="radio" name="grade" value="10" id="grade10">
-                <label for="grade10">10 </label>
-            </div>
+    <div class="form-group">
+        <label for="worst" class="col-sm-3 control-label">Što je bilo najgore u ovom iskustvu?</label>
+        <div class="col-sm-9">
+            <textarea name="worst" id="worst" class="form-control" rows="3">{{ participation.poll_worst }}</textarea>
         </div>
-
-        <div class="form-group">
-            <label for="best" class="col-sm-3 control-label">Što je bilo najbolje u ovom iskustvu?</label>
-            <div class="col-sm-9">
-                <textarea name="best" id="best" class="form-control" rows="3"></textarea>
-            </div>
+    </div>
+    
+    <div class="form-group">
+        <label for="change" class="col-sm-3 control-label">Što bi bilo bolje da je drugačije u ovom iskustvu?</label>
+        <div class="col-sm-9">
+            <textarea name="change" id="change" class="form-control" rows="3">{{ participation.poll_change }}</textarea>
         </div>
-
-        <div class="form-group">
-            <label for="worst" class="col-sm-3 control-label">Što je bilo najgore u ovom iskustvu?</label>
-            <div class="col-sm-9">
-                <textarea name="worst" id="worst" class="form-control" rows="3"></textarea>
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <label for="change" class="col-sm-3 control-label">Što bi bilo bolje da je drugačije u ovom iskustvu?</label>
-            <div class="col-sm-9">
-                <textarea name="change" id="change" class="form-control" rows="3"></textarea>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="futureorg" class="col-sm-3 control-label">Da li želite organizirati neko od sljedećih iskustava?</label>
-            <div class="col-sm-9">
-                <input type="checkbox" name="futureorg" id="futureorg" class="form-control" checked="1" value="1">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="note" class="col-sm-3 control-label">Poruka organizatoru</label>
-            <div class="col-sm-9">
-                <textarea name="note" id="note" class="form-control" rows="3"></textarea>
-            </div>
-        </div>
-
-        <div class="form-group" style="text-align: center">
-            <input type="submit" value="Pošalji">
-        </div>
-        </form>
-
     </div>
 
+    <div class="form-group">
+        <label for="futureorg" class="col-sm-3 control-label">Da li želite organizirati neko od sljedećih iskustava?</label>
+        <div class="col-sm-9">
+            <input type="checkbox" name="futureorg" id="futureorg" class="form-control" checked="1" value="1">
+        </div>
     </div>
 
+    <div class="form-group">
+        <label for="note" class="col-sm-3 control-label">Poruka organizatoru</label>
+        <div class="col-sm-9">
+            <textarea name="note" id="note" class="form-control" rows="3">{{ participation.poll_note }}</textarea>
+        </div>
+    </div>
 
-    <footer class="footer">
-    <p>&copy; NLP Hrvatska &amp; Ideja na kvadrat</p>
-    </footer>
+    <div class="form-group" style="text-align: center">
+        <input type="submit" value="Pošalji">
+    </div>
+    </form>
 
-</div> <!-- /container -->
+</div>
+
+</div>
 
 
 {% endblock %}

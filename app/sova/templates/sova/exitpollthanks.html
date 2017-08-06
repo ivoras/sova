@@ -1,41 +1,22 @@
-{% extends 'sova/base.html' %}
-{% block 'title' %}
-{{schedule.event.name}} - Hvala na sudjelovanju!
-{% endblock %}
-{% block 'body' %}
+{% extends 'sova/basehtml.html' %}
+{% block 'title' %}{{schedule.event.name}} - Hvala na sudjelovanju!{% endblock %}
+{% block 'container' %}
 
-<div class="container">
-    <div class="header clearfix">
-    <nav>
-        <ul class="nav nav-pills pull-right">
-        <li role="presentation" class="active"><a href="/">HooOrg home</a></li>
-        <li role="presentation"><a href="/contact">Contact</a></li>
-        </ul>
-    </nav>
-    <h3 class="text-muted">Hvala na sudjelovanju, {{ person.name }}</h3>
-    </div>
+<div class="jumbotron">
+<h1>{{ schedule.event.name }}</h1>
+<p class="lead">{{ schedule.event.hype_text }}</p>
+<p class="lead" style="text-align: center">Datum: <b style="white-space: nowrap">{{ schedule.event.date }}</b></p>
+<p class="lead text-success">Čestitamo što ste sudjelovali u ovom iskustvu!</p>
+</div>
 
-    <div class="jumbotron">
-    <h1>{{ schedule.event.name }}</h1>
-    <p class="lead">{{ schedule.event.hype_text }}</p>
-    <p class="lead" style="text-align: center">Datum: <b style="white-space: nowrap">{{ schedule.event.date }}</b></p>
-    <p class="lead text-success">Čestitamo što ste sudjelovali u ovom iskustvu!</p>
-    </div>
+<div class="row marketing">
+<div class="col-lg-6">
+    <p>Nadamo se da ste se ugodno proveli, da ste upoznali nove i zanimljive ljude, i da ste nešto naučili o sebi i o drugima!</p>
+</div>
 
-    <div class="row marketing">
-    <div class="col-lg-6">
-        <p>Nadamo se da ste se ugodno proveli, da ste upoznali nove i zanimljive ljude, i da ste nešto naučili o sebi i o drugima!</p>
-    </div>
-
-    <div class="col-lg-6">
-        <p>Kad bude vrijeme, poslati ćemo vam poziv za novu hooliganštinu!</p>
-    </div>
-    </div>
-
-    <footer class="footer">
-    <p>&copy; NLP Hrvatska &amp; Ideja na kvadrat</p>
-    </footer>
-
-</div> <!-- /container -->
+<div class="col-lg-6">
+    <p>Kad bude vrijeme, poslati ćemo vam poziv za novu hooliganštinu!</p>
+</div>
+</div>
 
 {% endblock %}

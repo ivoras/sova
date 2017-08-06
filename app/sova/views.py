@@ -137,7 +137,7 @@ def exitpoll(req, schedule, person):
     people_count = Participation.objects.filter(event=schedule.event, accepted=True, participated=True).count()
     people_percent = int((people_count / schedule.event.max_people) * 100) if schedule.event.max_people else 0
     participation = get_object_or_404(Participation, person=person, event=schedule.event)
-    return render(req, 'sova/exitpoll.html', { 'person': person, 'schedule': schedule, 'people_count': people_count, 'people_percent': people_percent })
+    return render(req, 'sova/exitpoll.html', { 'person': person, 'schedule': schedule, 'people_count': people_count, 'people_percent': people_percent, 'participation': participation })
 
 def exitpollsave(req, schedule, person):
     """
