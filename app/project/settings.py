@@ -27,7 +27,7 @@ SECRET_KEY = '+uyry45etk7ax)i8lfsdp5ejp3)=l8-w9ij8#3iq!rv^%w(r76'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['fielder.ivoras.net','127.0.0.1']
+ALLOWED_HOSTS = ['fielder.ivoras.net','127.0.0.1','sova.hooligans.life']
 
 
 # Application definition
@@ -133,10 +133,11 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.abspath('%s/../static' % BASE_DIR)
 
 DATETIME_FORMAT = 'd.m.Y. H:i'
 
-SOVA_BASE_URL = 'http://fielder.ivoras.net:8000'
+SOVA_BASE_URL = 'http://sova.hooligans.life'
 
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 25
