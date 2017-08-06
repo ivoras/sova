@@ -152,7 +152,8 @@ def exitpollsave(req, schedule, person):
     participation.poll_worst = req.POST['worst']
     participation.poll_futureorg = True if 'futureorg' in req.POST and req.POST['futureorg'] == '1' else False
     participation.poll_change = req.POST['change']
-    participadion.save()
+    participation.poll_note = req.POST['note']
+    participation.save()
 
     return render(req, 'sova/exitpollthanks.html', { 'person': person, 'schedule': schedule })
     
