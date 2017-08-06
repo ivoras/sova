@@ -1,5 +1,5 @@
 import base64
-from datetime import datetime
+#from datetime import datetime
 import os
 
 from django.core.mail import EmailMultiAlternatives
@@ -61,7 +61,7 @@ def accept(req, schedule, person):
     people_count = Participation.objects.filter(event=schedule.event, accepted=True).count()
     if schedule.event.max_people and people_count >= schedule.event.max_people:
         return render(req, 'sova/noroom.html', { 'person': person, 'schedule': schedule })
-    if datetime.today() > schedule.event.date or (schedule.event.deadline_for_joining and datetime.today() > schedule.event.deadline_for_joining):
+    if timezone.now() > schedule.event.date or (schedule.event.deadline_for_joining and timezone.now() > schedule.event.deadline_for_joining):
         return render(req, 'sova/toolate.html', { 'person': person, 'schedule': schedule })
 
     people_percent = int((people_count / schedule.event.max_people) * 100) if schedule.event.max_people else 0
@@ -138,7 +138,26 @@ def exitpoll(req, schedule, person):
     people_percent = int((people_count / schedule.event.max_people) * 100) if schedule.event.max_people else 0
     participation = get_object_or_404(Participation, person=person, event=schedule.event)
     return render(req, 'sova/exitpoll.html', { 'person': person, 'schedule': schedule, 'people_count': people_count, 'people_percent': people_percent })
+
+def exitpollsave(req, schedule, person):
+    """
+    Saves the exit poll results.
+    """
+    schedule = get_object_or_404(EmailSchedule, pk=int(schedule))
+    person = get_object_or_404(Person, pk=int(person))
+    participation = get_object_or_404(Participation, person=person, event=schedule.event)
+
+    participation.poll_grade = int(req.POST['grade'])
+    participation.poll_best = req.POST['best']
+    participation.poll_worst = req.POST['worst']
+    participation.poll_futureorg = True if 'futureorg' in req.POST and req.POST['futureorg'] == '1' else False
+    participation.poll_change = req.POST['change']
+    participadion.save()
+
+    return render(req, 'sova/exitpollthanks.html', { 'person': person, 'schedule': schedule })
     
+def contact(req):
+    return render(req, 'sova/contact.html', {})
 
 def get_profile_token(req, person=0):
     try:

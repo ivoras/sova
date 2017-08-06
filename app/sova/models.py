@@ -55,8 +55,8 @@ class Group(models.Model):
 class Event(models.Model):
     name = models.CharField(max_length=100)
     hype_text = models.TextField()
-    mail_prefix = models.CharField(max_length=100, blank=True, null=True)
-    header = HTMLField(default="Hi,")
+    mail_prefix = models.SlugField(max_length=100, blank=True, null=True)
+    header = HTMLField(default="Hi,\nTko ne dođe na ovu hoo, smrdi!")
     footer = HTMLField(default="----")
     date = models.DateTimeField()
     deadline_for_joining = models.DateTimeField(null=True, blank=True)

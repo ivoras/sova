@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^unaccept/(?P<schedule>[0-9]+)/(?P<person>[0-9]+)$', views.unaccept, name='unaccept'),
     url(r'^confirm/(?P<schedule>[0-9]+)/(?P<person>[0-9]+)$', views.confirm, name='confirm'),
     url(r'^exitpoll/(?P<schedule>[0-9]+)/(?P<person>[0-9]+)$', views.exitpoll, name='exitpoll'),
+    url(r'^exitpoll/(?P<schedule>[0-9]+)/(?P<person>[0-9]+)$', views.exitpollsave, name='exitpollsave'),
     url(r'^saveuserprofile/(?P<token>[A-Za-z0-9=\-_]+)$', views.save_user_profile, name='saveuserprofile'),
     url(r'^edituserprofile/(?P<token>[A-Za-z0-9=\-_]+)$', views.edit_user_profile, name='edituserprofile'),
     url(r'^sendprofiletoken/$', views.send_profile_token, name='sendprofiletoken'),
@@ -29,6 +30,7 @@ urlpatterns = [
     url(r'^getprofiletoken/$', views.get_profile_token, name='getprofiletoken'),
     url(r'^vote/(?P<event>[0-9]+)/(?P<person>[0-9]+)$', views.vote, name='vote'),
     url(r'^join/(?P<event>[0-9]+)/(?P<person>[0-9]+)$', views.join, name='join'),
+    url(r'^contact$', views.contact, name='contact'),
     url(r'^$', views.index, name='index'),
 
 ]

@@ -1,4 +1,4 @@
-{% extends 'sova/base.html' %}
+{% extends 'sova/baseemail.html' %}
 {% block 'title' %}
 {% if schedule.type == 1 %}{{schedule.event.name}} - obavijest - {{schedule.subject}}{% endif %}
 {% if schedule.type == 2 %}{{schedule.event.name}} - pozivnica - {{schedule.subject}}{% endif %}

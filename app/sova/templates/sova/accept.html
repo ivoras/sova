@@ -1,21 +1,8 @@
-{% extends 'sova/base.html' %}
-{% block 'title' %}
-{{schedule.event.name}} - Pozivnica
-{% endblock %}
-{% block 'body' %}
+{% extends 'sova/basepage.html' %}
+{% block 'title' %}{{schedule.event.name}} - Pozivnica za {{ person.name }}{% endblock %}
+{% block 'container' %}
 
-<div class="container">
-    <div class="header clearfix">
-    <nav>
-        <ul class="nav nav-pills pull-right">
-        <li role="presentation" class="active"><a href="/">HooOrg home</a></li>
-        <li role="presentation"><a href="/contact">Contact</a></li>
-        </ul>
-    </nav>
-    <h3 class="text-muted">Pozivnica za {{ person.name }}</h3>
-    </div>
-
-    <div class="jumbotron">
+<div class="jumbotron">
     <h1>{{ schedule.event.name }}</h1>
     <p class="lead">{{ schedule.event.hype_text }}</p>
     <p class="lead" style="text-align: center">Datum: <b style="white-space: nowrap">{{ schedule.event.date }}</b></p>
@@ -24,47 +11,41 @@
     </form>
     <p>Klikom na "Dolazim obavezno" se obvezujem da ću zapravo i doći, te da pristajem na cijenu kako je
         objašnjeno u pozivnici.</p>
-    </div>
+</div>
 
-    <div class="row marketing">
-    <div class="col-lg-6">
-        <h4>Vrijeme održavanja ovog iskustva</h4>
-        <p>Iskustvo se održava: <b style="white-space: nowrap">{{ schedule.event.date }}</b></p>
-    </div>
+<div class="row marketing">
+<div class="col-lg-6">
+    <h4>Vrijeme održavanja ovog iskustva</h4>
+    <p>Iskustvo se održava: <b style="white-space: nowrap">{{ schedule.event.date }}</b></p>
+</div>
 
-    <div class="col-lg-6">
-        {% if schedule.event.deadline_for_joining %}
-        <h4>Vrijeme prihvaćanja</h4>
-        <p>Rok za prihvaćanje poziva: <b style="white-space: nowrap">{{ schedule.event.deadline_for_joining }}</b></p>
-        {% endif %}
-    </div>
-    </div>
-
-    {% if schedule.event.max_people %}
-    <div class="row marketing">
-    <div class="col-lg-12">
-        <div class="alert alert-warning" role="alert">Maksimalni broj ljudi koji može sudjelovati je <b>{{ schedule.event.max_people }}</b>!</div>
-        <div class="progress">
-        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="{{ people_count }}" aria-valuemin="0" aria-valuemax="{{ schedule.event.max_people }}" style="width: {{people_percent}}%;" style="min-width: 2em">{{ people_percent }}%</div>
-        </div>
-        <p>Broj ljudi koji su potvrdili dolazak: {{ people_count }}.</p>
-    </div>
-    </div>
-    
+<div class="col-lg-6">
+    {% if schedule.event.deadline_for_joining %}
+    <h4>Vrijeme prihvaćanja</h4>
+    <p>Rok za prihvaćanje poziva: <b style="white-space: nowrap">{{ schedule.event.deadline_for_joining }}</b></p>
     {% endif %}
+</div>
+</div>
 
-    <div class="row marketing">
-    <div class="col-lg-12">
-        <h4>Tekst pozivnice</h4>
-        <p>{{ schedule.message|safe }}</p>
+{% if schedule.event.max_people %}
+<div class="row marketing">
+<div class="col-lg-12">
+    <div class="alert alert-warning" role="alert">Maksimalni broj ljudi koji može sudjelovati je <b>{{ schedule.event.max_people }}</b>!</div>
+    <div class="progress">
+    <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="{{ people_count }}" aria-valuemin="0" aria-valuemax="{{ schedule.event.max_people }}" style="width: {{people_percent}}%;" style="min-width: 2em">{{ people_percent }}%</div>
     </div>
-    </div>
+    <p>Broj ljudi koji su potvrdili dolazak: {{ people_count }}.</p>
+</div>
+</div>
 
-    <footer class="footer">
-    <p>&copy; NLP Hrvatska &amp; Ideja na kvadrat</p>
-    </footer>
+{% endif %}
 
-</div> <!-- /container -->
+<div class="row marketing">
+<div class="col-lg-12">
+    <h4>Tekst pozivnice</h4>
+    <p>{{ schedule.message|safe }}</p>
+</div>
+</div>
 
 
 {% endblock %}

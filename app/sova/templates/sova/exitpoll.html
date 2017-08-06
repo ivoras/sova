@@ -24,7 +24,7 @@
     <div class="row marketing">
     <div class="col-lg-12">
 
-        <form class="form-horizontal" method="POST" action="{{server}}{% url 'confirm' schedule.id person.id %}">
+        <form class="form-horizontal" method="POST" action="{{server}}{% url 'exitpollsave' schedule.id person.id %}">
 
         <div class="form-group">
             <label class="col-sm-2 control-label">Ocjena iskustva (10=najbolje)</label>
@@ -64,6 +64,26 @@
             </div>
         </div>
         
+        <div class="form-group">
+            <label for="change" class="col-sm-2 control-label">Što bi bilo bolje da je drugačije u iskustvu?</label>
+            <div class="col-sm-10">
+                <textarea name="change" id="change" class="form-control" rows="3"></textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="futureorg" class="col-sm-2 control-label">Da li želite organizirati neko od sljedećih iskustava?</label>
+            <div class="col-sm-10">
+                <input type="checkbox" name="futureorg" id="futureorg" class="form-control" checked="1" value="1">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="note" class="col-sm-2 control-label">Poruka organizatoru</label>
+            <div class="col-sm-10">
+                <textarea name="note" id="note" class="form-control" rows="3"></textarea>
+            </div>
+        </div>
 
 
     </div>

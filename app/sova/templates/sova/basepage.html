@@ -1,0 +1,19 @@
+{% extends 'sova/base.html' %}
+{% block 'body' %}
+    <div class="header clearfix">
+    <nav>
+        <ul class="nav nav-pills pull-right">
+        <li role="presentation" class="active"><a href="/">Hoo home</a></li>
+        <li role="presentation"><a href="/contact">Contact</a></li>
+        </ul>
+    </nav>
+    <h3 class="text-muted">{% block 'title' %}{% endblock %}</h3>
+    </div>
+
+    {% block 'container' %}
+    {% endblock 'container' %}
+
+    <footer class="footer">
+    <p>&copy; NLP Hrvatska &amp; Ideja na kvadrat</p>
+    </footer>
+{% endblock 'body' %}

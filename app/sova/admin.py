@@ -31,6 +31,7 @@ class EventAdmin(admin.ModelAdmin):
     list_display = ('name', 'mail_prefix', 'date')
     search_fields = ('name',)
     inlines = ( EmailScheduleInline, ParticipationInline )
+    prepopulated_fields = { 'mail_prefix': ('name',) }
 
 class EmailScheduleAdmin(admin.ModelAdmin):
     list_display = ('date', 'event', 'name', 'subject', 'type', 'group', 'target', 'sent')
@@ -48,6 +49,9 @@ class EmailScheduleAdmin(admin.ModelAdmin):
         }),
         ("Poruka za slanje", {
             'fields': ('subject', 'message')
+        }),
+        ("Debug", {
+            'fields': ('sent',)
         })
     )
 

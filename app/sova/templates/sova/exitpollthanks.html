@@ -1,6 +1,6 @@
 {% extends 'sova/base.html' %}
 {% block 'title' %}
-{{schedule.event.name}} - Potvrda sudjelovanja
+{{schedule.event.name}} - Hvala na sudjelovanju!
 {% endblock %}
 {% block 'body' %}
 
@@ -12,27 +12,23 @@
         <li role="presentation"><a href="/contact">Contact</a></li>
         </ul>
     </nav>
-    <h3 class="text-muted">Potvrda za {{ person.name }}</h3>
+    <h3 class="text-muted">Hvala na sudjelovanju, {{ person.name }}</h3>
     </div>
 
     <div class="jumbotron">
     <h1>{{ schedule.event.name }}</h1>
     <p class="lead">{{ schedule.event.hype_text }}</p>
     <p class="lead" style="text-align: center">Datum: <b style="white-space: nowrap">{{ schedule.event.date }}</b></p>
-    <p class="lead text-success">Čestitamo što ste odabrali sudjelovati u iskustvu! Dobiti ćete dodatne upute na e-mail!</p>
+    <p class="lead text-success">Čestitamo što ste sudjelovali u ovom iskustvu!</p>
     </div>
 
     <div class="row marketing">
     <div class="col-lg-6">
-        <h4>Vrijeme održavanja ovog iskustva</h4>
-        <p>Iskustvo se održava: <b style="white-space: nowrap">{{ schedule.event.date }}</b></p>
+        <p>Nadamo se da ste se ugodno proveli, da ste upoznali nove i zanimljive ljude, i da ste nešto naučili o sebi i o drugima!</p>
     </div>
 
     <div class="col-lg-6">
-        {% if schedule.event.deadline_for_joining %}
-        <h4>Vrijeme prihvaćanja</h4>
-        <p>Rok za prihvaćanje poziva: <b style="white-space: nowrap">{{ schedule.event.deadline_for_joining }}</b></p>
-        {% endif %}
+        <p>Kad bude vrijeme, poslati ćemo vam poziv za novu hooliganštinu!</p>
     </div>
     </div>
 
