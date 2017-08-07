@@ -102,7 +102,7 @@ class EmailSchedule(models.Model):
     target = models.IntegerField(choices=SEND_CHOICES, default=SEND_EVERYONE)
     event = models.ForeignKey(Event)
     type = models.IntegerField(choices=TYPE_CHOICES, default=TYPE_MESSAGE)
-    date = models.DateTimeField()
+    date = models.DateTimeField(db_index=True)
     subject = models.CharField(max_length=200)
     message = HTMLField()
     sent = models.BooleanField(default=False)

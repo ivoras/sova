@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.core.mail import EmailMultiAlternatives
 from django.core.management.base import BaseCommand
 from django.utils import timezone
@@ -18,7 +19,7 @@ class Command(BaseCommand):
         for es in EmailSchedule.objects.select_related().filter(date__lte=timezone.now(), sent=False):
             if not es.group.email_enabled:
                 continue
-            self.stdout.write("Scheduled to send: " + str(es))
+            self.stdout.write("%s Scheduled to send: %s", (datetime.now().isoformat(), str(es)))
             if es.event.mail_prefix:
                 subject = "[%s] %s" % (es.event.mail_prefix, es.name)
             else:
