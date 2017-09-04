@@ -56,7 +56,7 @@ class EmailScheduleAdmin(admin.ModelAdmin):
     )
 
 class ParticipationAdmin(admin.ModelAdmin):
-    list_display = ('person', 'event', 'poll_grade', 'participated')
+    list_display = ('person', 'event', 'poll_grade', 'accepted', 'participated')
     list_filter = ('person', 'event', 'poll_grade', 'participated')
 
 class GroupAutoParticipationAdmin(admin.ModelAdmin):
