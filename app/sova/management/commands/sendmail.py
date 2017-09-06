@@ -39,7 +39,7 @@ class Command(BaseCommand):
                 recipients = es.group.persons.filter(email_enabled=True) & Person.objects.filter(participation__event=es.event, participation__accepted=True)
                 template_file = 'sova/acceptemail.html'
             elif es.target == EmailSchedule.SEND_NOT_ACCEPTED:
-                recipients = es.group.persons.filter(email_enabled=True) & Person.objects.filter(participation__event=es.event, participation__accepted=False)
+                recipients = set(es.group.persons.filter(email_enabled=True)) - set(Person.objects.filter(participation__event=es.event, participation__accepted=True))
                 template_file = 'sova/acceptemail.html'
             elif es.target == EmailSchedule.SEND_YES_REQUIREMENTS:
                 recipients = es.group.persons.filter(email_enabled=True) & Person.objects.filter(participation__event=es.event, participation__requirements_done=True)
