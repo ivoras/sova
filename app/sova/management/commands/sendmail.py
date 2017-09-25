@@ -65,7 +65,7 @@ class Command(BaseCommand):
                     context['auto_accepted'] = recipient.id in auto_accepted_ids
                 html_content = html.render(context)
                 msg = EmailMultiAlternatives(subject, plain_text, settings.EMAIL_FROM, [recipient.email])
-                msg.extra_headers['Reply-To'] = settings.EMAIL_REPLY_TO
+                msg.extra_headers['Reply-To'] = es.event.organiser.email #settings.EMAIL_REPLY_TO
                 msg.attach_alternative(html_content, "text/html")
                 msg.send()
                 self.stdout.write("Sent '%s' to '%s'" % (subject, recipient.email))

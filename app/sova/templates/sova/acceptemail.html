@@ -20,6 +20,7 @@
     {% elif schedule.event.max_people %}
     <p>Požurite! Maksimalan broj ljudi na ovom iskustvu je {{ schedule.event.max_people }}!</p>
     {% endif %}
+    <p>Organizator(ica): {{ schedule.event.organiser }}</p>
 {% endif %}
 
 <footer>{{schedule.event.footer|safe}}</footer>
