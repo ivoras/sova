@@ -56,6 +56,7 @@ class Event(models.Model):
     name = models.CharField(max_length=100)
     hype_text = models.TextField()
     mail_prefix = models.SlugField(max_length=100, blank=True, null=True)
+    organiser = models.ForeignKey(Person, related_name='event_organiser')
     header = HTMLField(default="Hi,\nTko ne dođe na ovu hoo, smrdi!")
     footer = HTMLField(default="----")
     date = models.DateTimeField()
