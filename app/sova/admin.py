@@ -2,6 +2,9 @@ from django.contrib import admin
 
 from .models import Person, Group, Event, EmailSchedule, Participation, GroupAutoParticipation, Token
 
+class GroupPersonInline(admin.StackedInline):
+    model = Group.persons.through
+
 class PersonAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'email_enabled', 'phone_enabled')
     search_fields = ('name', 'email')
@@ -16,6 +19,7 @@ class PersonAdmin(admin.ModelAdmin):
             'fields': ('phone', 'phone_enabled')
         })
     )
+    inlines = ( GroupPersonInline, )
 
 class GroupAdmin(admin.ModelAdmin):
     list_display = ('name', 'email_enabled')
@@ -57,7 +61,9 @@ class EmailScheduleAdmin(admin.ModelAdmin):
 
 class ParticipationAdmin(admin.ModelAdmin):
     list_display = ('person', 'event', 'poll_grade', 'accepted', 'participated')
+    list_editable = ('participated',)
     list_filter = ('person', 'event', 'poll_grade', 'participated')
+    ordering = ('event',)
 
 class GroupAutoParticipationAdmin(admin.ModelAdmin):
     list_display = ('group', 'person')

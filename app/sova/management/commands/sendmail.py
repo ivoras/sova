@@ -35,6 +35,10 @@ class Command(BaseCommand):
                             p = Participation(event=es.event, person=r, accepted=True)
                             p.save()
                         auto_accepted_ids.add(r.id)
+                    if not es.event.organiser.id in auto_accepted_ids:
+                        p = Participation(event=es.event, person=es.event.organiser, accepted=True)
+                        p.save()
+                        auto_accepted_ids.add(es.event.organiser.id)
             elif es.target == EmailSchedule.SEND_ACCEPTED:
                 recipients = es.group.persons.filter(email_enabled=True) & Person.objects.filter(participation__event=es.event, participation__accepted=True)
                 template_file = 'sova/acceptemail.html'
