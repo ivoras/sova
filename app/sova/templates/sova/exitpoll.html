@@ -43,21 +43,21 @@
     <div class="form-group">
         <label for="best" class="col-sm-3 control-label">Što je bilo najbolje u ovom iskustvu?</label>
         <div class="col-sm-9">
-            <textarea name="best" id="best" class="form-control" rows="3">{{ participation.poll_best }}</textarea>
+            <textarea name="best" id="best" class="form-control" rows="3">{{ participation.poll_best|default:"lijen/a sam" }}</textarea>
         </div>
     </div>
 
     <div class="form-group">
         <label for="worst" class="col-sm-3 control-label">Što je bilo najgore u ovom iskustvu?</label>
         <div class="col-sm-9">
-            <textarea name="worst" id="worst" class="form-control" rows="3">{{ participation.poll_worst }}</textarea>
+            <textarea name="worst" id="worst" class="form-control" rows="3">{{ participation.poll_worst|default:"lijen/a sam" }}</textarea>
         </div>
     </div>
     
     <div class="form-group">
         <label for="change" class="col-sm-3 control-label">Što bi bilo bolje da je drugačije u ovom iskustvu?</label>
         <div class="col-sm-9">
-            <textarea name="change" id="change" class="form-control" rows="3">{{ participation.poll_change }}</textarea>
+            <textarea name="change" id="change" class="form-control" rows="3">{{ participation.poll_change|default:"lijen/a sam" }}</textarea>
         </div>
     </div>
 
@@ -71,7 +71,7 @@
     <div class="form-group">
         <label for="note" class="col-sm-3 control-label">Poruka organizatoru</label>
         <div class="col-sm-9">
-            <textarea name="note" id="note" class="form-control" rows="3">{{ participation.poll_note }}</textarea>
+            <textarea name="note" id="note" class="form-control" rows="3">{{ participation.poll_note|default:"lijen/a sam nešto napisati" }}</textarea>
         </div>
     </div>
 

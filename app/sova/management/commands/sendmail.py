@@ -21,9 +21,9 @@ class Command(BaseCommand):
                 continue
             self.stdout.write("%s Scheduled to send: %s" % (datetime.now().isoformat(), str(es)))
             if es.event.mail_prefix:
-                subject = "[%s] %s" % (es.event.mail_prefix, es.name)
+                subject = "[%s] %s" % (es.event.mail_prefix, es.subject)
             else:
-                subject = es.name
+                subject = es.subject
             auto_accepted_ids = set()
             if es.target == EmailSchedule.SEND_EVERYONE:
                 recipients = es.group.persons.filter(email_enabled=True)
