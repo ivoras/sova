@@ -8,8 +8,11 @@
 
 <header>{{schedule.event.header|safe}}</header>
 
+{{ schedule.message }}
+
 <p><a style="font-size: 1.5em" href="{{server}}{% url 'exitpoll' schedule.id person.id %}">Što mislite o ovom iskustvu?</a></p>
 
 <footer>{{schedule.event.footer|safe}}</footer>
 
+<p>Organizator(ica): {{ schedule.event.organiser }}</p>
 {% endblock %}
