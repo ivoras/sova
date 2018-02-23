@@ -27,6 +27,20 @@ class GroupAdmin(admin.ModelAdmin):
 
 class EmailScheduleInline(admin.StackedInline):
     model = EmailSchedule
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'event')
+        }),
+        ("Datum slanja maila", {
+            'fields': ('date',)
+        }),
+        ("Ciljana publika", {
+            'fields': ('group', 'target', 'type')
+        }),
+        ("Poruka za slanje", {
+            'fields': ('subject', 'message')
+        }),
+    )
 
 class ParticipationInline(admin.StackedInline):
     model = Participation
@@ -54,10 +68,13 @@ class EmailScheduleAdmin(admin.ModelAdmin):
         ("Poruka za slanje", {
             'fields': ('subject', 'message')
         }),
-        ("Debug", {
-            'fields': ('sent',)
-        })
     )
+
+    def get_fieldsets(self, req, obj):
+        fs = list(super().get_fieldsets(req, obj))
+        if req.user.is_superuser:
+            fs.append(("Debug", {'fields': ('sent',)},))
+        return fs
 
 class ParticipationAdmin(admin.ModelAdmin):
     list_display = ('person', 'event', 'poll_grade', 'accepted', 'participated')
