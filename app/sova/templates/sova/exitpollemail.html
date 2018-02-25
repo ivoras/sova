@@ -8,7 +8,7 @@
 
 <header>{{schedule.event.header|safe}}</header>
 
-{{ schedule.message }}
+{{ schedule.message|safe }}
 
 <p><a style="font-size: 1.5em" href="{{server}}{% url 'exitpoll' schedule.id person.id %}">Što mislite o ovom iskustvu?</a></p>
 
