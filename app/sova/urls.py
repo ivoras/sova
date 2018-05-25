@@ -30,7 +30,8 @@ urlpatterns = [
     url(r'^getprofiletoken/$', views.get_profile_token, name='getprofiletoken'),
     url(r'^vote/(?P<event>[0-9]+)/(?P<person>[0-9]+)$', views.vote, name='vote'),
     url(r'^join/(?P<event>[0-9]+)/(?P<person>[0-9]+)$', views.join, name='join'),
+    url(r'^unsubscribe/(?P<person>[0-9]+)$', views.unsubscribe, name='unsubscribe'),
+    url(r'^unsubscribesave/(?P<person>[0-9]+)$', views.unsubscribesave, name='unsubscribesave'),
     url(r'^contact$', views.contact, name='contact'),
     url(r'^$', views.index, name='index'),
-
 ]

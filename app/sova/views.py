@@ -157,6 +157,23 @@ def exitpollsave(req, schedule, person):
 
     return render(req, 'sova/exitpollthanks.html', { 'person': person, 'schedule': schedule })
     
+def unsubscribe(req, person):
+    """
+    Shows the unsubscribe form to the user.
+    """
+    person = get_object_or_404(Person, pk=int(person))
+    return render(req, 'sova/unsubscribe.html', { 'person': person })
+
+def unsubscribesave(req, person):
+    if req.POST['unsubscribe'] == '1':
+        person = get_object_or_404(Person, pk=int(person))
+        person.email_enabled = False
+        person.save()
+        return render(req, 'sova/unsubscribe_yes.html', { 'person': person })
+    else:
+        return render(req, 'sova/unsubscribe_no.html', { 'person': person })
+
+
 def contact(req):
     return render(req, 'sova/contact.html', {})
 
