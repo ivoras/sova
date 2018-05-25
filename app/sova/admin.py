@@ -48,7 +48,7 @@ class ParticipationInline(admin.StackedInline):
 class EventAdmin(admin.ModelAdmin):
     list_display = ('name', 'mail_prefix', 'date')
     search_fields = ('name',)
-    inlines = ( EmailScheduleInline, ParticipationInline )
+    # inlines = ( EmailScheduleInline, ParticipationInline )
     prepopulated_fields = { 'mail_prefix': ('name',) }
 
 class EmailScheduleAdmin(admin.ModelAdmin):

@@ -31,7 +31,7 @@
 {% if schedule.event.max_people %}
 <div class="row marketing">
 <div class="col-lg-12">
-    <div class="alert alert-warning" role="alert">Maksimalni broj ljudi koji može sudjelovati je <b>{{ schedule.event.max_people }}</b>!</div>
+    <div class="alert alert-warning" role="alert">Maksimalan broj ljudi koji može sudjelovati je <b>{{ schedule.event.max_people }}</b>!</div>
     <div class="progress">
     <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="{{ people_count }}" aria-valuemin="0" aria-valuemax="{{ schedule.event.max_people }}" style="width: {{people_percent}}%;" style="min-width: 2em">{{ people_percent }}%</div>
     </div>
