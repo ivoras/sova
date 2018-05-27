@@ -27,7 +27,7 @@ SECRET_KEY = '+uyry45etk7ax)i8lfsdp5ejp3)=l8-w9ij8#3iq!rv^%w(r76'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['fielder.ivoras.net','127.0.0.1','sova.hooligans.life']
+ALLOWED_HOSTS = ['fielder.ivoras.net','127.0.0.1','komord.whispr.ws']
 
 
 # Application definition
@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'sova',
+        'NAME': 'komord',
         'USER': 'sova',
         'ATOMIC_REQUESTS': True,
         'CONN_MAX_AGE': 1800
@@ -137,19 +137,19 @@ STATIC_ROOT = os.path.abspath('%s/../static' % BASE_DIR)
 
 DATETIME_FORMAT = 'd.m.Y. H:i'
 
-SOVA_BASE_URL = 'http://sova.hooligans.life'
+SOVA_BASE_URL = 'http://komord.whispr.pw'
 
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 25
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_FROM = 'Hoo <ivoras@ivoras.net>'
+EMAIL_FROM = 'Komunikacijska Ordinacija <ivoras@ivoras.net>'
 EMAIL_REPLY_TO = 'Ivan Voras <ivoras@gmail.com>'
 
 EMAIL_ADMIN = 'ivoras@gmail.com'
 
 SUBSCRIBE_ENABLED = True
 
-ORG_TITLE = 'NLP Hooligans Club'
+ORG_TITLE = 'Komunikacijska ordinacija'
 
 import json
 CFG = json.loads(open('/etc/sova/sova_config.js').read())
