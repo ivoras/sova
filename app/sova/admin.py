@@ -1,6 +1,7 @@
+from django import forms
 from django.contrib import admin
 
-from .models import Person, Group, Event, EmailSchedule, Participation, GroupAutoParticipation, Token
+from .models import Person, Group, Event, EmailSchedule, Participation, GroupAutoParticipation, Token, EventOption
 
 class GroupPersonInline(admin.StackedInline):
     model = Group.persons.through
@@ -45,10 +46,14 @@ class EmailScheduleInline(admin.StackedInline):
 class ParticipationInline(admin.StackedInline):
     model = Participation
 
+class EventOptionInline(admin.StackedInline):
+    model = EventOption
+
 class EventAdmin(admin.ModelAdmin):
     list_display = ('name', 'mail_prefix', 'date')
     search_fields = ('name',)
     # inlines = ( EmailScheduleInline, ParticipationInline )
+    inlines = (EventOptionInline,)
     prepopulated_fields = { 'mail_prefix': ('name',) }
 
 class EmailScheduleAdmin(admin.ModelAdmin):
@@ -76,11 +81,26 @@ class EmailScheduleAdmin(admin.ModelAdmin):
             fs.append(("Debug", {'fields': ('sent',)},))
         return fs
 
+def participation_options(obj):
+    return ",".join([ o.name for o in obj.options.all() ])
+
 class ParticipationAdmin(admin.ModelAdmin):
-    list_display = ('person', 'event', 'poll_grade', 'accepted', 'participated')
+    list_display = ('person', 'event', 'poll_grade', 'accepted', 'participated', participation_options)
     list_editable = ('participated',)
     list_filter = ('person', 'event', 'poll_grade', 'participated')
     ordering = ('event',)
+
+    def get_form(self, request, obj=None, **kwargs):
+        self.instance = obj
+        return super(ParticipationAdmin, self).get_form(request, obj=obj, **kwargs)
+
+    def formfield_for_manytomany(self, db_field, request=None, **kwargs):
+        try:
+            if db_field.name == 'options' and self.instance:
+                kwargs['queryset'] = EventOption.objects.filter(event_id = self.instance.event_id)
+        except AttributeError:
+            pass
+        return super(ParticipationAdmin, self).formfield_for_manytomany(db_field, request=request, **kwargs)
 
 class GroupAutoParticipationAdmin(admin.ModelAdmin):
     list_display = ('group', 'person')

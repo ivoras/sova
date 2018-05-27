@@ -1,10 +1,11 @@
 import base64
 #from datetime import datetime
+import re
 import os
 
 from django.core.mail import EmailMultiAlternatives
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest
 from django.urls import reverse
 from django.core.validators import validate_email
 from django import forms
@@ -14,8 +15,10 @@ from django.conf import settings
 from django.contrib import messages
 from django.template.loader import get_template
 
-from .models import Person, Event, Participation, EmailSchedule, Token
+from .models import Person, Event, Participation, EmailSchedule, Token, EventOption
 
+
+RE_EMAIL = re.compile(r'^[^@]+@[^@]+\.[^@.]+')
 
 def index(req):
     return render(req, 'sova/index.html')
@@ -70,10 +73,11 @@ def accept(req, schedule, person):
         participation = Participation.objects.get(person=person, event=schedule.event)
         if participation.accepted:
             return render(req, 'sova/unaccept.html', { 'person': person, 'schedule': schedule, 'people_count': people_count, 'people_percent': people_percent })
+        options = EventOption.objects.filter(event_id = schedule.event_id)
     except Participation.DoesNotExist:
         pass
 
-    return render(req, 'sova/accept.html', { 'person': person, 'schedule': schedule, 'people_count': people_count, 'people_percent': people_percent })
+    return render(req, 'sova/accept.html', { 'person': person, 'schedule': schedule, 'people_count': people_count, 'people_percent': people_percent, 'options': options })
 
 
 def confirm(req, schedule, person):
@@ -156,7 +160,7 @@ def exitpollsave(req, schedule, person):
     participation.save()
 
     return render(req, 'sova/exitpollthanks.html', { 'person': person, 'schedule': schedule })
-    
+
 def unsubscribe(req, person):
     """
     Shows the unsubscribe form to the user.
@@ -173,6 +177,32 @@ def unsubscribesave(req, person):
     else:
         return render(req, 'sova/unsubscribe_no.html', { 'person': person })
 
+def subscribe(req):
+    if settings.SUBSCRIBE_ENABLED:
+        return render(req, 'sova/subscribe.html', { 'org_title': settings.ORG_TITLE, 'cfg': settings.CFG })
+    else:
+        raise Http404("Subscribing not enabled")
+
+def subscribesave(req):
+    if not settings.SUBSCRIBE_ENABLED:
+        raise Http404("Subscribing not enabled")
+    m = RE_EMAIL.match(req.POST['email'])
+    if m == None:
+        return subscribe(req)
+    """
+    When your users submit the form where you integrated reCAPTCHA, you'll get as part of the payload a string with the name "g-recaptcha-response". In order to check whether Google has verified that user, send a POST request with these parameters:
+URL: https://www.google.com/recaptcha/api/siteverify
+secret (required)	6LdfeFsUAAAAAIJpr3bug3TF3BQzNGN_MIAQ1QR5
+response (required)	The value of 'g-recaptcha-response'.
+remoteip	The end user's ip address.
+The reCAPTCHA documentation site describes more details and advanced configurations.
+    """
+
+
+
+def subscribeconfirm(req):
+    if not settings.SUBSCRIBE_ENABLED:
+        raise Http404("Subscribing not enabled")
 
 def contact(req):
     return render(req, 'sova/contact.html', {})

@@ -8,6 +8,16 @@
     <p class="lead" style="text-align: center">Datum: <b style="white-space: nowrap">{{ schedule.event.date }}</b></p>
     <form method="GET" action="{{server}}{% url 'confirm' schedule.id person.id %}">
     <p style="text-align: center"><button class="btn btn-lg btn-success" type="submit">Dolazim obavezno</button></p>
+    {% if schedule.event.eventoption_set.all %}
+        <div class="options">
+            {% for o in schedule.event.eventoption_set.all %}
+            <div class="option">
+                <label><input type="checkbox" name="option_{{ o.id }}" value="1"> {{ o.name }}</label>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
     </form>
     <p>Klikom na "Dolazim obavezno" se obvezujem da ću zapravo i doći, te da pristajem na cijenu kako je
         objašnjeno u pozivnici.</p>
@@ -38,7 +48,6 @@
     <p>Broj ljudi koji su potvrdili dolazak: {{ people_count }}.</p>
 </div>
 </div>
-
 {% endif %}
 
 <div class="row marketing">

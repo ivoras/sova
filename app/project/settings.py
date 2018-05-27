@@ -146,3 +146,10 @@ EMAIL_FROM = 'Hoo <ivoras@ivoras.net>'
 EMAIL_REPLY_TO = 'Ivan Voras <ivoras@gmail.com>'
 
 EMAIL_ADMIN = 'ivoras@gmail.com'
+
+SUBSCRIBE_ENABLED = True
+
+ORG_TITLE = 'NLP Hooligans Club'
+
+import json
+CFG = json.loads(open('/etc/sova/sova_config.js').read())

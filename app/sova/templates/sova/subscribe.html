@@ -1,0 +1,34 @@
+{% extends 'sova/base.html' %}
+{% block 'title' %}
+Pretplata na mailing listu za {{ org_title }}
+{% endblock %}
+{% block 'body' %}
+<script src='https://www.google.com/recaptcha/api.js'></script>
+
+<h1 style="text-align: center">Pretplata na mailing listu za<br> {{ org_title }}</h1>
+
+<form action="{{ server }}{% url 'subscribesave' %}" method="POST">
+    {% csrf_token %}
+    <table border="0" align="center">
+        <tr><td>Ime i prezime</td><td style="padding: 5px"><input name="name" type="text" style="width: 30em"></td></tr>
+        <tr><td>E-mail adresa</td><td style="padding: 5px"><input name="email" type="email" style="width: 30em"></td></tr>
+        <tr><td colspan="2" style="padding: 5px">
+            <p>Uvjeti korištenja:</p>
+            <ul>
+                <li>Upisom svoje e-mail adrese potvrđujem da se želim prijaviti na e-mail listu za
+                <i>{{ org_title }}</i>.</li> 
+                <li><i>{{ org_title }}</i> će pohraniti i koristiti vašu e-mail adresu da bi vam
+                slao obavijesti koje uključuju pozivnice za sudjelovanje na događajima.</li>
+                <li><i>{{ org_title }}</i> vašu e-mail adresu neće prosljeđivati trećim stranama
+                niti je koristiti za svrhe koje nisu ovdje opisane.</li>
+            </ul>
+        </td></tr>
+        <tr><td colspan="2" style="padding: 5px" align="center">
+            <div class="g-recaptcha" data-sitekey="{{ cfg.RECAPTCHA_SITE_KEY }}"></div>
+        </td></tr>
+
+        <tr><td colspan="2" align="center" style="padding: 5px"><input type="submit" value="Potvrđujem"></td></tr>
+    </table>
+</form>
+
+{% endblock %}

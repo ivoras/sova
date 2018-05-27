@@ -32,6 +32,7 @@ class Person(models.Model):
     email_enabled = models.BooleanField(default=True)
     phone = models.CharField(max_length=50, null=True, blank=True)
     phone_enabled = models.BooleanField(default=False)
+    time_joined = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     def __str__(self):
         return u"%s <%s>" % (self.name, self.email)
@@ -50,7 +51,6 @@ class Group(models.Model):
 
     class Meta:
         ordering = ('name', )
-
 
 class Event(models.Model):
     name = models.CharField(max_length=100)
@@ -71,6 +71,13 @@ class Event(models.Model):
     class Meta:
         ordering = ('-date', )
 
+
+class EventOption(models.Model):
+    name = models.CharField(max_length=100)
+    event = models.ForeignKey(Event)
+
+    def __str__(self):
+        return self.name
 
 class EmailSchedule(models.Model):
     SEND_EVERYONE = 1
@@ -127,6 +134,7 @@ class Participation(models.Model):
     requirements_done = models.BooleanField(default=False) # Participation requirements (e.g. payment) have been satisfied
     participated = models.BooleanField(default=False)
     accepted = models.BooleanField(default=False) # They probably won't open the link if they don't want to participate, but we still need to track OR change this into an autoaccept link
+    options = models.ManyToManyField(EventOption, blank=True)
 
     poll_grade = models.IntegerField(blank=True, null=True)
     poll_best = models.TextField(blank=True, null=True)
