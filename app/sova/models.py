@@ -59,7 +59,7 @@ class Event(models.Model):
     organiser = models.ForeignKey(Person, related_name='event_organiser')
     header = HTMLField(default="Hi,\nTko ne dođe na ovu hoo, smrdi!")
     footer = HTMLField(default="----")
-    date = models.DateTimeField()
+    date = models.DateTimeField(verbose_name="Date of event")
     deadline_for_joining = models.DateTimeField(null=True, blank=True)
     schedules = models.ManyToManyField(Group, through='EmailSchedule')
     participations = models.ManyToManyField(Person, through='Participation')

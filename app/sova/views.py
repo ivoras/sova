@@ -75,6 +75,7 @@ def accept(req, schedule, person):
             return render(req, 'sova/unaccept.html', { 'person': person, 'schedule': schedule, 'people_count': people_count, 'people_percent': people_percent })
         options = EventOption.objects.filter(event_id = schedule.event_id)
     except Participation.DoesNotExist:
+        options = []
         pass
 
     return render(req, 'sova/accept.html', { 'person': person, 'schedule': schedule, 'people_count': people_count, 'people_percent': people_percent, 'options': options })
