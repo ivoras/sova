@@ -71,6 +71,7 @@ class Command(BaseCommand):
                 msg = EmailMultiAlternatives(subject, plain_text, settings.EMAIL_FROM, [recipient.email])
                 msg.extra_headers['Reply-To'] = es.event.organiser.email #settings.EMAIL_REPLY_TO
                 msg.attach_alternative(html_content, "text/html")
+                msg.attach('calendar_event.ics', es.event.to_ical(), 'text/calendar')
                 msg.send()
                 self.stdout.write("Sent '%s' to '%s'" % (subject, recipient.email))
             es.sent = True

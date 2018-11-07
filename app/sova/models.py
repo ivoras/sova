@@ -5,6 +5,10 @@ from django.utils import timezone
 import random
 from tinymce.models import HTMLField
 
+import icalendar
+from datetime import datetime
+from pytz import UTC # timezone
+
 
 def random_p_pkey():
     random.seed()
@@ -67,6 +71,22 @@ class Event(models.Model):
 
     def __str__(self):
         return u"%s %s" % (self.name, timezone.localtime(self.date).strftime('%d.%m.%Y. %H:%M'))
+
+    def to_ical(self):
+        cal = icalendar.Calendar()
+        cal.add('prodid', '-//Sova (Hoo! Hoo!)//ivoras.net//')
+        cal.add('version', '2.0')
+        cal.add('attendee', "MAILTO:%s" % self.organiser.email)
+
+        event = icalendar.Event()
+        event.add('summary', "%s (%s)" % (self.name, self.hype_text))
+        event.add('dtstart', self.date)
+        event.add('uid', '%d@ivoras.net' % self.id)
+        event.add('priority', 1)
+
+        cal.add_component(event)
+
+        return cal.to_ical()
 
     class Meta:
         ordering = ('-date', )
