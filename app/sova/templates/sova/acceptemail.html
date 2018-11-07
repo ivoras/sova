@@ -14,8 +14,8 @@
     <p>Ovo je pozivnica na događaj koji će se održati <b>{{ schedule.event.date }}</b>. {% if schedule.event.deadline_for_joining %}Odluku o dolasku trebate
         donijeti <b>do {{ schedule.event.deadline_for_joining }}</b>.{% endif %} Kad se odlučite, kliknite na link ovdje:</p>
     <p><a style="font-size: 1.5em" href="{{server}}{% url 'accept' schedule.id person.id %}">Želim znati dodatne informacije!</a></p>
-    <p>(Ovaj link možete koristiti i da otkažete dolaza. Taj link je specifičan za vas i ako ga proslijedite nekome drugom, moći
-    će umjesto vas otkazati Hoo.)</p>
+    <p>(Ovaj link možete koristiti i da otkažete dolazak. Taj link je specifičan za vas i ako ga proslijedite nekome drugom, moći
+    će umjesto vas otkazati dolazak na Hoo.)</p>
     {# Accept / no-accept #}
     {% if auto_accepted %}
     <p><b>Automatski ste prijavljeni za ovo iskustvo!</b> Ne morate ništa raditi (niti išta klikati) do sljedeće obavijesti.</p>

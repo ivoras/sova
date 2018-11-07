@@ -28,7 +28,7 @@ def random_es_pkey():
 class Person(models.Model):
     id = models.IntegerField(primary_key=True, default=random_p_pkey)
     name = models.CharField(max_length=100)
-    email = models.CharField(max_length=100)
+    email = models.CharField(max_length=100, unique=True)
     email_enabled = models.BooleanField(default=True)
     phone = models.CharField(max_length=50, null=True, blank=True)
     phone_enabled = models.BooleanField(default=False)
