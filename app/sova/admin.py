@@ -87,7 +87,7 @@ def participation_options(obj):
 class ParticipationAdmin(admin.ModelAdmin):
     list_display = ('person', 'event', 'poll_grade', 'accepted', 'participated', participation_options)
     list_editable = ('participated',)
-    list_filter = ('person', 'event', 'poll_grade', 'participated')
+    list_filter = ('person', 'event', 'accepted', 'poll_grade', 'participated')
     ordering = ('event',)
 
     def get_form(self, request, obj=None, **kwargs):
