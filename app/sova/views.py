@@ -62,17 +62,17 @@ def accept(req, schedule, person):
     schedule = get_object_or_404(EmailSchedule, pk=int(schedule))
     person = get_object_or_404(Person, pk=int(person))
 
+    people_count = Participation.objects.filter(event=schedule.event, accepted=True).count()
+    people_percent = int((people_count / schedule.event.max_people) * 100) if schedule.event.max_people else 0
+
     try:
         participation = Participation.objects.get(person=person, event=schedule.event)
-        people_count = Participation.objects.filter(event=schedule.event, accepted=True).count()
-        people_percent = int((people_count / schedule.event.max_people) * 100) if schedule.event.max_people else 0
 
         if participation.accepted:
             return render(req, 'sova/unaccept.html', { 'person': person, 'schedule': schedule, 'people_count': people_count, 'people_percent': people_percent })
         options = EventOption.objects.filter(event_id = schedule.event_id)
     except Participation.DoesNotExist:
         options = []
-        pass
 
     if schedule.event.max_people and people_count >= schedule.event.max_people:
         return render(req, 'sova/noroom.html', { 'person': person, 'schedule': schedule })
