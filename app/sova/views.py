@@ -14,6 +14,7 @@ from django.utils.html import strip_tags
 from django.conf import settings
 from django.contrib import messages
 from django.template.loader import get_template
+from django.contrib.auth import authenticate, login, logout
 
 from .models import Person, Event, Participation, EmailSchedule, Token, EventOption
 
@@ -21,8 +22,30 @@ from .models import Person, Event, Participation, EmailSchedule, Token, EventOpt
 RE_EMAIL = re.compile(r'^[^@]+@[^@]+\.[^@.]+')
 
 def index(req):
-    return render(req, 'sova/index.html')
+    ctx = {}
+    return render(req, 'sova/index.html', ctx)
 
+def vlogin(req):
+    ctx = {}
+    if req.method == 'GET':
+        return render(req, 'sova/login.html', ctx)
+    user = authenticate(username=req.POST['username'], password=req.POST['password'])
+    if user == None:
+        ctx['error'] = 'Invalid login'
+        return render(req, 'sova/login.html', ctx)
+    if not user.is_staff:
+        ctx['error'] = 'Access denied'
+        return render(req, 'sova/login.html', ctx)
+    login(req, user)
+    return HttpResponseRedirect(reverse('index'))
+
+def vlogout(req):
+    logout(req)
+    return HttpResponseRedirect(reverse('index'))
+
+def about(req):
+    ctx = {}
+    return render(req, 'sova/about.html', ctx)
 
 def join(req, event, person):
     person = get_object_or_404(Person, pk=int(person))

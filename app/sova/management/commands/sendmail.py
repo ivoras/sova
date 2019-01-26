@@ -55,7 +55,8 @@ class Command(BaseCommand):
                 recipients = es.group.persons.filter(email_enabled=True) & Person.objects.filter(participation__event=es.event, participation__participated=True)
                 template_file = 'sova/exitpollemail.html'
             else:
-                self.stdout.write("Unknown schedule target: %s" % es.target)
+                self.stdout.write("Unknown schedule target: %s and type %s" % (es.target, es.type))
+                return
                 
             for recipient in recipients:
                 plain_text = "%s\n\n%s\n\n%s\n" % (strip_tags(es.event.header), strip_tags(es.message), strip_tags(es.event.footer))
@@ -71,9 +72,11 @@ class Command(BaseCommand):
                 msg = EmailMultiAlternatives(subject, plain_text, settings.EMAIL_FROM, [recipient.email])
                 msg.extra_headers['Reply-To'] = es.event.organiser.email #settings.EMAIL_REPLY_TO
                 msg.attach_alternative(html_content, "text/html")
+                note = ""
                 if es.type != EmailSchedule.TYPE_EXIT_POLL:
                     msg.attach('calendar_event.ics', es.event.to_ical(), 'text/calendar')
+                    note += "+cal"
                 msg.send()
-                self.stdout.write("Sent '%s' to '%s'" % (subject, recipient.email))
+                self.stdout.write("Sent '%s' to '%s' %s" % (subject, recipient.email, note))
             es.sent = True
             es.save()

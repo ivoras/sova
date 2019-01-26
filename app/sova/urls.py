@@ -36,5 +36,10 @@ urlpatterns = [
     url(r'^subscribesave$', views.subscribesave, name='subscribesave'),
     url(r'^subscribeconfirm$', views.subscribeconfirm, name='subscribeconfirm'),
     url(r'^contact$', views.contact, name='contact'),
-    url(r'^$', views.index, name='index'),
+
+
+    url(r'^login$',     views.vlogin,   name='login'),
+    url(r'^logout$',    views.vlogout,  name='logout'),
+    url(r'^about$',     views.about,    name='about'),
+    url(r'^$',          views.index,    name='index'),
 ]
