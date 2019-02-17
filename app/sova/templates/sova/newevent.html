@@ -1,0 +1,142 @@
+{% extends 'sova/base.html' %}
+{% block 'title' %}Unos pozivnice{% endblock %}
+{% block 'body' %}
+
+<p>Kod tajnih iskustava se u nazive i opise (ili bilo gdje) ne smiju pojavljivati informacije
+    koje bi otkrile točno o čemu se radi. Treba pisati <i>teasere</i>, opise koji podižu interes,
+    intrigantne pozive. U ovom obrascu trebate upisati opće informacije o događaju i sadržaj
+    četiri maila koji će se poslati u upisana vremena: pozivnica, podsjetnik, detalji i zahvalnica.</p>
+
+<form method="POST" action="/newevent">
+    {% csrf_token %}
+
+	<div class="form-group">
+        <p><b>Opće informacije o događaju</b></p>
+		<label for="eventName">Naziv iskustva</label>
+		<input name="name" type="text" class="form-control" id="eventName" aria-describedby="nameHelp" placeholder="Naziv" onkeyup="nameToSlug()">
+		<small id="nameHelp" class="form-text text-muted">Da bi iskustvo bilo tajno, ni naziv ni drugi tekstovi ne smiju sadržavati ništa što bi odalo o čemu se radi.</small>
+	</div>
+	<div class="form-group">
+		<label for="hypeText">Teaser / hype text</label>
+		<textarea name="hypeText" class="form-control" id="hypeText" placeholder="Teaser koji se prikazuje kad osoba klikne na link u mailu"></textarea>
+	</div>
+
+	<div class="row">
+		<div class="form-group col-4">
+            <label for="eventSlug">Oznaka za naslov maila ([tag])</label>
+            <input name="slug" type="text" class="form-control" id="eventSlug" placeholder="oznaka-za-mail">
+		</div>
+		<div class="form-group col-4">
+            <label for="group">Grupa primatelja</label>
+            <select name="group" type="text" class="form-control" id="group">
+                {% for g in groups %}
+                <option value="{{ g.id }}">{{ g.name }}</option>
+                {% endfor %}
+            </select>
+		</div>
+	</div>
+
+
+	<div class="form-group">
+		<label for="header">Zaglavlje maila (ispisuje se na početku svakog maila)</label>
+		<textarea name="header" class="form-control richtext" id="header" placeholder="Zaglavlje maila, koje se ispisuje na početku svakog maila"></textarea>
+	</div>
+	<div class="form-group">
+		<label for="footer">Kraj maila (ispisuje se na kraju svakog maila)</label>
+		<textarea name="footer" class="form-control richtext" id="footer" placeholder="Podnožje maila, koje se ispisuje na kraju svakog maila"></textarea>
+	</div>
+	<div class="row">
+		<div class="form-group col-4">
+			<label for="dateEvent">Vrijeme održavanja</label>
+			<input name="dateEvent" class="form-control" type="datetime-local" value="{{ eventDate }}" id="dateEvent">
+		</div>
+		<div class="form-group col-4">
+			<label for="dateAccept">Rok za prihvaćanje poziva</label>
+			<input name="dateAccept" class="form-control" type="datetime-local" value="{{ acceptDate }}" id="dateAccept">
+		</div>
+		<div class="form-group col-4">
+			<label for="maxPeople">Max. broj polaznika (opcionalno)</label>
+			<input name="maxPeople" class="form-control" type="number" value="" id="maxPeople">
+		</div>
+	</div>
+
+    <hr>
+
+	<div class="form-group">
+        <p><b>Mail s pozivnicom</b></p>
+		<label for="invitationDate">Datum slanja maila s pozivnicom</label>
+		<input name="invitationDate" id="invitationDate" type="datetime-local" class="form-control" value="{{ invitationDate }}">
+	</div>
+	<div class="form-group">
+		<label for="invitationText">Tekst pozivnice</label>
+		<textarea name="invitationText" id="invitationText" class="form-control richtext" placeholder="Tekst prvog maila kojeg će primaoci dobiti - pozivnica na događaj."></textarea>
+	</div>
+	<div class="form-group">
+        <p><b>Mail s podsjetnikom</b></p>
+		<label for="reminderDate">Datum slanja maila s podsjetnikom</label>
+		<input name="reminderDate" id="reminderDate" type="datetime-local" class="form-control" value="{{ reminderDate }}">
+	</div>
+	<div class="form-group">
+		<label for="reminderText">Tekst podsjetnika</label>
+		<textarea name="reminderText" id="reminderText" class="form-control richtext" placeholder="Tekst drugog maila kojeg će primaoci dobiti - podsjetnik za prijavu na događaj."></textarea>
+	</div>
+	<div class="form-group">
+        <p><b>Mail s detaljima</b></p>
+		<label for="detailsDate">Datum slanja maila s detaljima događaja</label>
+		<input name="detailsDate" id="detailsDate" type="datetime-local" class="form-control" value="{{ detailsDate }}">
+	</div>
+	<div class="form-group">
+		<label for="detailsText">Tekst s detaljima</label>
+		<textarea name="detailsText" id="detailsText" class="form-control richtext" placeholder="Tekst trećeg maila kojeg će primaoci dobiti - detalji događaja."></textarea>
+	</div>
+	<div class="form-group">
+        <p><b>Mail sa zahvalnicom</b></p>
+		<label for="thanksDate">Datum slanja maila sa zahvalnicom</label>
+		<input name="thanksDate" id="thanksDate" type="datetime-local" class="form-control" value="{{ thanksDate }}">
+	</div>
+	<div class="form-group">
+		<label for="thanksText">Tekst zahvalnice</label>
+		<textarea name="thanksText" class="form-control richtext" id="thanksText" placeholder="Tekst četvrtog maila kojeg će primaoci dobiti - zahvalnice za sudjelovanje."></textarea>
+	</div>
+   
+    <p>Ovaj obrazac služi jednostavnom unosu pozivnice. Naprednije mogućnosti, i mijenjanje postojećih pozivnica se mogu
+    napraviti samo u <a href="/admin">administracijskom sučelju</a>.</p>
+	
+	<button type="submit" class="btn btn-primary">Zapiši pozivnicu</button>
+
+</form>
+
+<script src='/static/tiny_mce/tiny_mce.js'></script>
+<script>
+  tinymce.init({
+    selector: '.richtext',
+    'theme': 'advanced',
+    'theme_advanced_buttons1': 'bold,italic,underline,separator,bullist,numlist,separator,outdent,indent,separator,undo,redo,separator,link,unlink,separator,code',
+    'theme_advanced_buttons2': '',
+    'theme_advanced_buttons3': '',
+    'theme_advanced_toolbar_location': 'top',
+    'theme_advanced_toolbar_align': 'left',
+    'paste_text_sticky': true,
+    'paste_text_sticky_default': true,
+    'plugins': 'paste'
+  });
+
+  function nameToSlug() {
+		var name = $('#eventName').val();
+		var slug = "";
+
+		for (var i = 0; i < name.length; i++) {
+			var ch = name.charAt(i).toLowerCase();
+			if (ch.match(/^[a-z0-9]$/)) {
+				slug = slug + ch;
+			} else if (ch == " ") {
+				slug = slug + "-";
+			}
+		}
+
+	  	$('#eventSlug').val(slug);
+  }
+</script>
+
+
+{% endblock %}

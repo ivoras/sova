@@ -41,5 +41,6 @@ urlpatterns = [
     url(r'^login$',     views.vlogin,   name='login'),
     url(r'^logout$',    views.vlogout,  name='logout'),
     url(r'^about$',     views.about,    name='about'),
+    url(r'^newevent$',  views.newevent, name='newevent'),
     url(r'^$',          views.index,    name='index'),
 ]

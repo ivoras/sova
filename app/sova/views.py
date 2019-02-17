@@ -1,5 +1,5 @@
 import base64
-#from datetime import datetime
+from datetime import datetime, timedelta
 import re
 import os
 
@@ -11,18 +11,23 @@ from django.core.validators import validate_email
 from django import forms
 from django.utils import timezone
 from django.utils.html import strip_tags
+from django.utils.safestring import mark_safe
 from django.conf import settings
 from django.contrib import messages
 from django.template.loader import get_template
 from django.contrib.auth import authenticate, login, logout
 
-from .models import Person, Event, Participation, EmailSchedule, Token, EventOption
+from .models import Person, Group, Event, Participation, EmailSchedule, Token, EventOption
 
 
 RE_EMAIL = re.compile(r'^[^@]+@[^@]+\.[^@.]+')
+TS_FORMAT = '%Y-%m-%dT%H:%M'
 
 def index(req):
-    ctx = {}
+    if not req.user.is_authenticated:
+        return HttpResponseRedirect(reverse('login'))
+    organiser = Person.objects.get(email=req.user.email)
+    ctx = { 'events': [ {'id': e.id, 'name': e.name, 'date': e.date} for e in Event.objects.filter(organiser=organiser).order_by('-date')] }
     return render(req, 'sova/index.html', ctx)
 
 def vlogin(req):
@@ -46,6 +51,44 @@ def vlogout(req):
 def about(req):
     ctx = {}
     return render(req, 'sova/about.html', ctx)
+
+def newevent(req):
+    if not (req.user.is_authenticated and req.user.is_staff):
+        return HttpResponseRedirect(reverse('index'))
+    organiser = Person.objects.get(email=req.user.email)
+    if req.method == 'GET':
+        now = datetime.now()
+        ctx = {'groups': [ {"id": g.id, "name": g.name } for g in Group.objects.order_by('name') ], 'eventDate': (now + timedelta(days=7)).strftime(TS_FORMAT), 'invitationDate': (now + timedelta(days=3)).strftime(TS_FORMAT), 'acceptDate': (now + timedelta(days=6, hours=12)).strftime(TS_FORMAT), 'reminderDate': (now + timedelta(days=5)).strftime(TS_FORMAT),'detailsDate': (now + timedelta(days=6)).strftime(TS_FORMAT), 'thanksDate': (now + timedelta(days=8)).strftime(TS_FORMAT)}
+        return render(req, 'sova/newevent.html', ctx)
+    
+    dateEvent = datetime.strptime(req.POST['dateEvent'], TS_FORMAT)
+    dateAccept = datetime.strptime(req.POST['dateAccept'], TS_FORMAT)
+    maxPeople = int(req.POST['maxPeople']) if req.POST['maxPeople'] != '' else None
+    group = Group.objects.get(id=int(req.POST['group']))
+
+    e = Event(name=req.POST['name'], hype_text=req.POST['hypeText'], mail_prefix=req.POST['slug'], organiser=organiser, header=mark_safe(req.POST['header']), footer=mark_safe(req.POST['footer']), date=dateEvent, deadline_for_joining=dateAccept,
+    max_people=maxPeople)
+    e.save()
+
+    invitationDate = datetime.strptime(req.POST['invitationDate'], TS_FORMAT)
+    invitationES = EmailSchedule(name='Pozivnica: %s' % e.name,
+    group=group, target=EmailSchedule.SEND_EVERYONE, event=e, type=EmailSchedule.TYPE_INVITATION, date=invitationDate, subject='Pozivnica: %s' % e.name, message=mark_safe(req.POST['invitationText']))
+    invitationES.save()
+
+    reminderDate = datetime.strptime(req.POST['reminderDate'], TS_FORMAT)
+    reminderES = EmailSchedule(name='Pozivnica: %s (podsjetnik)' % e.name, group=group, target=EmailSchedule.SEND_NOT_ACCEPTED, event=e, type=EmailSchedule.TYPE_INVITATION, date=reminderDate, subject='Pozivnica: %s (podsjetnik)' % e.name, message=mark_safe(req.POST['invitationText']))
+    reminderES.save()
+
+    detailsDate = datetime.strptime(req.POST['detailsDate'], TS_FORMAT)
+    detailsES = EmailSchedule(name='Detalji: %s' % e.name, group=group, target=EmailSchedule.SEND_ACCEPTED, event=e, type=EmailSchedule.TYPE_MESSAGE, date=detailsDate, subject='%s' % e.name, message=mark_safe(req.POST['detailsText']))
+    detailsES.save()
+
+    thanksDate = datetime.strptime(req.POST['thanksDate'], TS_FORMAT)
+    thanksES = EmailSchedule(name='Zahvalnica: %s' % e.name, group=group, target=EmailSchedule.SEND_ACCEPTED, event=e, type=EmailSchedule.TYPE_EXIT_POLL, date=thanksDate, subject='Zahvalnica: %s' % e.name, message=mark_safe(req.POST['thanksText']))
+    thanksES.save()
+
+    return HttpResponseRedirect(reverse('index'))
+
 
 def join(req, event, person):
     person = get_object_or_404(Person, pk=int(person))

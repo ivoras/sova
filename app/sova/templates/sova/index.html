@@ -2,4 +2,25 @@
 {% block 'title' %}Home{% endblock %}
 {% block 'body' %}
 
+<div>
+    <a class="btn btn-success" role="button" href="/newevent">Novi poziv</a>
+</div>
+
+<table class="table" style="margin-top: 15px">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Naziv</th>
+            <th scope="col">Datum</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for e in events %}
+        <tr>
+            <td><a href="/admin/sova/event/{{ e.id }}/change/">{{ e.name }}</a></td>
+            <td>{{ e.date }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
 {% endblock %}
